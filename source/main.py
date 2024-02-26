@@ -58,7 +58,6 @@ while not is_solved(board_values):
                      board_values[box_to_change_key][1] == board_values[box_being_checked_key][1])):
 
                     board_values[box_to_change_key][3].add(board_values[box_being_checked_key][0])
-                    # print("changed!")
 
                 if len(board_values[box_to_change_key][3]) == 8:
                     new_value: int = (set(range(1, 10)) - board_values[box_to_change_key][3]).pop()
