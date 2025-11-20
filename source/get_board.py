@@ -1,4 +1,4 @@
-from source.board import flatten_matrix_to_1d_tuple
+from board import flatten_matrix_to_1d_tuple
 
 SUDOKU_BOARD_SIZE: int = 9
 
@@ -33,6 +33,13 @@ def create_board_json(board: tuple[int, ...]) -> None:
         f.write(output)
 
 
-def from_list(board: list[list[int]]) -> None:
+def from_matrix(board: list[list[int]]) -> None:
     create_board_json(flatten_matrix_to_1d_tuple(board))
 
+
+def main() -> None:
+    from_matrix(raw_board)
+
+
+if __name__ == "__main__":
+    main()

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from itertools import chain
 from typing import Optional, Iterable, overload
 
-from source.common.types import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
+from common.types import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:

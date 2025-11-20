@@ -1,6 +1,5 @@
-from typing import TypeVar, Literal
 
-from source.board import Cell
+from typing import TypeVar, Literal
 
 
 T = TypeVar('T')
@@ -11,8 +10,8 @@ type coordinates = tuple[int, int]
 
 type cell_insert_type = Literal["value", "corner", "centre", "colour"]
 
-type board_flat = tuple[Cell, ...]
-type board_matrix = tuple[tuple[Cell, ...], ...]
+type board_flat = tuple["Cell", ...]
+type board_matrix = tuple[tuple["Cell", ...], ...]
 
 type board_flat_raw = tuple[int, ...]
 type board_matrix_raw = tuple[tuple[int, ...], ...]
