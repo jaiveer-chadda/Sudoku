@@ -10,8 +10,8 @@ def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[
 
 
 def _convert_ints_to_cell_board(int_list: Iterable[int]) -> board_flat:
-    return tuple(map(lambda value: Cell(value), int_list))
-
+    return tuple([Cell(index=i, value=val) for i, val in enumerate(int_list)])
+    
 
 # def _get_coords_from_index(index: int) -> tuple[int, int]:
 #     return index % 9, index // 9
@@ -98,5 +98,34 @@ class Board:
                 self.board[index].colours.append(input_)
             case _:
                 raise ValueError("Invalid cell type")
+            
+    def __str__(self) -> str:
+        return ("""
+        ┌───────┬───────┬───────┐
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        ├───────┼───────┼───────┤
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        ├───────┼───────┼───────┤
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        │ {} {} {} │ {} {} {} │ {} {} {} │
+        └───────┴───────┴───────┘
+        """.format(
+            *[f"{i.value if i.value not in (0, None) else " "}" for i in self.board]
+        ))
+    
+    def __repr__(self) -> str:
+        return "".join(
+            [f"{
+                val if (val := self.board[i].value)!=0 else " "
+            }{
+                "\n" if i % 9 == 8 else " "
+            }"
+             for i in range(len(self.board))]
+        )
 
 

@@ -1,5 +1,5 @@
 
-from typing import TypeVar, Literal
+from typing import TypeVar, Literal, Iterable
 
 
 T = TypeVar('T')
@@ -13,8 +13,8 @@ type cell_insert_type = Literal["value", "corner", "centre", "colour"]
 type board_flat = tuple["Cell", ...]
 type board_matrix = tuple[tuple["Cell", ...], ...]
 
-type board_flat_raw = tuple[int, ...]
-type board_matrix_raw = tuple[tuple[int, ...], ...]
+type board_flat_raw = Iterable[int]
+type board_matrix_raw = Iterable[Iterable[int]]
 
 # type board_flat_raw = tuple[
 #     int, int, int, int, int, int, int, int, int,
