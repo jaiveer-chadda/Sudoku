@@ -5,6 +5,9 @@ from typing import Optional, Iterable, overload
 from common.types import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 
+ALL_OPTIONS: list[int] = list(range(1, 10))
+
+
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:
     return tuple(chain.from_iterable(list_to_flatten))
 
@@ -12,10 +15,6 @@ def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[
 def _convert_ints_to_cell_board(int_list: Iterable[int]) -> board_flat:
     return tuple([Cell(index=i, value=val) for i, val in enumerate(int_list)])
     
-
-# def _get_coords_from_index(index: int) -> tuple[int, int]:
-#     return index % 9, index // 9
-
 
 def _get_index_from_coords(x: int, y: int) -> int:
     return (x % 9) + (y * 9)
@@ -30,8 +29,10 @@ class Cell:
     index: int
     
     value: Optional[int] = None
-    corner_candidates: list[int] = field(default_factory=list)
-    central_candidates: list[int] = field(default_factory=list)
+    _possible_options: list[int] = field(default_factory=lambda: ALL_OPTIONS)
+    
+    corner_candidates_user: list[int] = field(default_factory=list)
+    central_candidates_user: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
     
     @property
@@ -91,9 +92,9 @@ class Board:
             case "value":
                 self.board[index].value = input_
             case "corner":
-                self.board[index].corner_candidates.append(input_)
+                self.board[index].corner_candidates_user.append(input_)
             case "centre":
-                self.board[index].central_candidates.append(input_)
+                self.board[index].central_candidates_user.append(input_)
             case "colour":
                 self.board[index].colours.append(input_)
             case _:
