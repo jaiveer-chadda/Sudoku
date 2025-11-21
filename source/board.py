@@ -10,10 +10,6 @@ ALL_OPTIONS: list[int] = list(range(1, 10))
 
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:
     return tuple(chain.from_iterable(list_to_flatten))
-
-
-def _convert_ints_to_cell_board(int_list: Iterable[int]) -> board_flat:
-    return tuple([Cell(index=i, value=val) for i, val in enumerate(int_list)])
     
 
 def _get_index_from_coords(x: int, y: int) -> int:
@@ -27,6 +23,7 @@ def _get_parent_box_from_coords(x: int, y: int) -> int:
 @dataclass
 class Cell:
     index: int
+    _parent: Board
     
     value: Optional[int] = None
     _possible_options: list[int] = field(default_factory=lambda: ALL_OPTIONS)
@@ -59,7 +56,10 @@ class Cell:
 class Board:
     def __init__(self, board: board_matrix_raw) -> None:
         _flat_board: board_flat_raw  = flatten_matrix_to_1d_tuple(board)
-        self.board: board_flat = _convert_ints_to_cell_board(_flat_board)
+        self.board: board_flat = self._convert_ints_to_cells(_flat_board)
+    
+    def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
+        return tuple([Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)])
     
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
