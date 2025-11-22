@@ -4,8 +4,14 @@ from board import Board
 
 board: Board = Board(raw_board)
 
-print(board)
 
+# print("\n"*10)
+
+for i in board.board:
+    pass
+    print(repr(i))
+
+print(board)
 
 # from utils import *
 #

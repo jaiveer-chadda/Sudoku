@@ -30,24 +30,36 @@ class Cell:
     _parent: Board
     
     value: Optional[int] = None
-    _possible_options: Optional[set[int]] = field(default_factory=lambda: ALL_OPTIONS)
+    _possible_options: set[int] | None = field(default_factory=lambda: ALL_OPTIONS.copy())
     
     corner_candidates: list[int] = field(default_factory=list)
     central_candidates: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
     
     def __post_init__(self) -> None:
-        self._parent.rows[self.y].add(self)
-        self._parent.columns[self.x].add(self)
-        self._parent.boxes[self.parent_box].add(self)
+        if self.value == 0:
+            self.value = None
         
-        # # figure out which numbers this cell can and can't be
+        # self._parent.columns[self.x].add(self)
+        # self._parent.rows[self.y].add(self)
+        # self._parent.boxes[self.parent_box].add(self)
+        #
         # if self.value is not None:
         #     # if this cell's value is already set,
         #     #   then we don't have to calculate its possibilities
         #     self._possible_options = None
         #     return
-    
+        #
+        # for group_to_check in (
+        #         self._parent.columns[self.x],
+        #         self._parent.rows[self.y],
+        #         self._parent.boxes[self.parent_box]
+        # ):
+        #     self._possible_options -= get_all_values(group_to_check)
+        #     for cell in group_to_check:
+        #         if cell._possible_options is not None:
+        #             cell._possible_options.discard(self.value)
+        
     @property
     def x(self) -> int:
         return self.index % 9
@@ -77,9 +89,8 @@ class Cell:
 
 class Board:
     def __init__(self, board: board_matrix_raw) -> None:
-        
-        self.rows: list[set[Cell]] = [set() for _ in range(9)]
         self.columns: list[set[Cell]] = [set() for _ in range(9)]
+        self.rows: list[set[Cell]] = [set() for _ in range(9)]
         self.boxes: list[set[Cell]] = [set() for _ in range(9)]
         
         self.board: Optional[board_flat] = None  # just initialising the property
@@ -88,7 +99,7 @@ class Board:
         self.board: board_flat = self._convert_ints_to_cells(_flat_board)
     
     def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
-        return tuple([Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)])
+        return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
     
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
