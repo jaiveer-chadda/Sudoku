@@ -42,6 +42,10 @@ class Cell:
     colours: list[colour] = field(default_factory=list)
     
     def __post_init__(self) -> None:
+        self._parent.columns[self.x].add(self)
+        self._parent.rows[self.y].add(self)
+        self._parent.boxes[self.parent_box].add(self)
+        
         # the board is stored such that the value of each cell is 0 if it's undefined
         #   this just fixes that for easier logic
         if self.value == 0:
@@ -67,6 +71,10 @@ class Cell:
     def parent_box(self) -> int:
         return _get_parent_box_from_coords(*self.coords)
     
+    @property
+    def sees(self) -> set[Cell]:
+        return self._parent.columns[self.x] | self._parent.rows[self.y] | self._parent.boxes[self.parent_box]
+    
     def __str__(self) -> str:
         return str(self.value) if self.value is not None else "-"
     
@@ -91,6 +99,12 @@ class Board:
     def print_candidates(self) -> None:
         for i, cell in enumerate(self.board):
             print(f"{format_set(cell.possible_options)}", end=("\n" if i%9==8 else ""))
+    
+    def calculate_candidates(self):
+        for cell_to_check in self.board:
+            if cell_to_check.value is not None:
+                for cell_to_change in cell_to_check.sees:
+                    cell_to_change.possible_options.discard(cell_to_check.value)
     
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
@@ -130,7 +144,7 @@ class Board:
                 self.board[index].colours.append(input_)
             case _:
                 raise ValueError("Invalid cell type")
-            
+        
     def __str__(self) -> str:
         return ("""
         ┌───────┬───────┬───────┐

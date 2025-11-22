@@ -11,9 +11,14 @@ for i in board.board:
     pass
     # print(repr(i))
 
+board.calculate_candidates()
+
 print(board)
 
 board.print_candidates()
+# print()
+# print(board.board[0]._parent.columns)
+# print(board.board[0].sees)
 
 # from utils import *
 #
