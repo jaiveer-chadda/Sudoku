@@ -24,41 +24,28 @@ def get_all_values(from_: Iterable[Cell]) -> set[int]:
     return set(map(lambda cell: cell.value, from_))
 
 
+def format_set(input_set: set[int]) -> str:
+    # {1, 2, 5, 6, 9}
+    return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=9 else ""}" for i in range(1, 10)])+"} "
+
+
 @dataclass(eq=False)
 class Cell:
     index: int
     _parent: Board
     
     value: Optional[int] = None
-    _possible_options: set[int] | None = field(default_factory=lambda: ALL_OPTIONS.copy())
+    possible_options: set[int] | None = field(default_factory=lambda: ALL_OPTIONS.copy())
     
     corner_candidates: list[int] = field(default_factory=list)
     central_candidates: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
     
     def __post_init__(self) -> None:
+        # the board is stored such that the value of each cell is 0 if it's undefined
+        #   this just fixes that for easier logic
         if self.value == 0:
             self.value = None
-        
-        # self._parent.columns[self.x].add(self)
-        # self._parent.rows[self.y].add(self)
-        # self._parent.boxes[self.parent_box].add(self)
-        #
-        # if self.value is not None:
-        #     # if this cell's value is already set,
-        #     #   then we don't have to calculate its possibilities
-        #     self._possible_options = None
-        #     return
-        #
-        # for group_to_check in (
-        #         self._parent.columns[self.x],
-        #         self._parent.rows[self.y],
-        #         self._parent.boxes[self.parent_box]
-        # ):
-        #     self._possible_options -= get_all_values(group_to_check)
-        #     for cell in group_to_check:
-        #         if cell._possible_options is not None:
-        #             cell._possible_options.discard(self.value)
         
     @property
     def x(self) -> int:
@@ -84,7 +71,7 @@ class Cell:
         return str(self.value) if self.value is not None else "-"
     
     def __repr__(self) -> str:
-        return str(self._possible_options) if self._possible_options is not None else f".{self.value}."
+        return str(self.possible_options) if self.possible_options is not None else f".{self.value}."
 
 
 class Board:
@@ -100,6 +87,10 @@ class Board:
     
     def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
         return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
+    
+    def print_candidates(self) -> None:
+        for i, cell in enumerate(self.board):
+            print(f"{format_set(cell.possible_options)}", end=("\n" if i%9==8 else ""))
     
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:

@@ -9,9 +9,11 @@ board: Board = Board(raw_board)
 
 for i in board.board:
     pass
-    print(repr(i))
+    # print(repr(i))
 
 print(board)
+
+board.print_candidates()
 
 # from utils import *
 #
