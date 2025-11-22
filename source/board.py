@@ -25,8 +25,11 @@ def get_all_values(from_: Iterable[Cell]) -> set[int]:
 
 
 def format_set(input_set: set[int]) -> str:
-    # {1, 2, 5, 6, 9}
     return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=9 else ""}" for i in range(1, 10)])+"} "
+
+
+def format_set_2(input_set: set[int]) -> str:
+    return "".join([f"{i if i in input_set else " "}{" " if i!=9 else ""}" for i in range(1, 10)])+" "
 
 
 @dataclass(eq=False)
@@ -35,7 +38,7 @@ class Cell:
     _parent: Board
     
     value: Optional[int] = None
-    possible_options: set[int] | None = field(default_factory=lambda: ALL_OPTIONS.copy())
+    possible_options: set[int] = field(default_factory=lambda: ALL_OPTIONS.copy())
     
     corner_candidates: list[int] = field(default_factory=list)
     central_candidates: list[int] = field(default_factory=list)
@@ -46,11 +49,21 @@ class Cell:
         self._parent.rows[self.y].add(self)
         self._parent.boxes[self.parent_box].add(self)
         
-        # the board is stored such that the value of each cell is 0 if it's undefined
-        #   this just fixes that for easier logic
+        # the board is stored such that the value of each cell is 0 if it's undefined -
+        #  this just fixes that for easier logic
         if self.value == 0:
             self.value = None
+            
+        if self.value is not None:
+            self.possible_options = {self.value}
         
+    def remove_from_options(self, to_remove: int) -> None:
+        self.possible_options.remove(to_remove)
+        
+        if len(self.possible_options) == 1:
+            self.value = list(self.possible_options)[0]
+            # print(f"changed {self.coords} to {self.value}")
+
     @property
     def x(self) -> int:
         return self.index % 9
@@ -95,17 +108,32 @@ class Board:
     
     def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
         return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
-    
-    def print_candidates(self) -> None:
-        for i, cell in enumerate(self.board):
-            print(f"{format_set(cell.possible_options)}", end=("\n" if i%9==8 else ""))
-    
+
     def calculate_candidates(self):
-        for cell_to_check in self.board:
-            if cell_to_check.value is not None:
+        something_changed: bool = True
+        
+        # repeat until you can make no further progress
+        while something_changed:
+            something_changed = False
+            
+            # iterate through every cell in the board
+            for cell_to_check in self.board:
+                # ignore the cells that don't have a value
+                if cell_to_check.value is None:
+                    continue
+                
+                # for all cells with a value, check which cells it can see,
+                #  and remove its value from those cells
                 for cell_to_change in cell_to_check.sees:
-                    cell_to_change.possible_options.discard(cell_to_check.value)
-    
+                    try:
+                        cell_to_change.remove_from_options(cell_to_check.value)
+                        something_changed = True
+                    # if a KeyError is raised,
+                    #  it means that that value wasn't in the cell we tried to remove it from
+                    #   which doesn't matter, so it's ignored
+                    except KeyError:
+                        pass
+                    
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
         pass
@@ -144,7 +172,40 @@ class Board:
                 self.board[index].colours.append(input_)
             case _:
                 raise ValueError("Invalid cell type")
+    
+    def print_candidates(self) -> None:
+        for i, cell in enumerate(self.board):
+            print(f"{format_set(cell.possible_options)}", end=("\n" if i%9==8 else ""))
         
+        # line: str = "│ {} {} {} │ {} {} {} │ {} {} {} │"
+        # blank: str = " "*18
+        # empty_line: str = f"│ {blank} {blank} {blank} │ {blank} {blank} {blank} │ {blank} {blank} {blank} │"
+        # to_format: str = f"""
+        # ┌{'—'*58}┬{'—'*58}┬{'—'*58}┐
+        # {line}
+        # {empty_line}
+        # {line}
+        # {empty_line}
+        # {line}
+        # ├{'—'*58}┼{'—'*58}┼{'—'*58}┤
+        # {line}
+        # {empty_line}
+        # {line}
+        # {empty_line}
+        # {line}
+        # ├{'—'*58}┼{'—'*58}┼{'—'*58}┤
+        # {line}
+        # {empty_line}
+        # {line}
+        # {empty_line}
+        # {line}
+        # └{'—'*58}┴{'—'*58}┴{'—'*58}┘
+        # """
+        #
+        # print(to_format.format(
+        #     *[format_set_2(i.possible_options) for i in self.board]
+        # ))
+    
     def __str__(self) -> str:
         return ("""
         ┌───────┬───────┬───────┐

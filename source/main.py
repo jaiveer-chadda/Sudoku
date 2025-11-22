@@ -5,20 +5,12 @@ from board import Board
 board: Board = Board(raw_board)
 
 
-# print("\n"*10)
-
-for i in board.board:
-    pass
-    # print(repr(i))
+print(board)
 
 board.calculate_candidates()
 
 print(board)
 
-board.print_candidates()
-# print()
-# print(board.board[0]._parent.columns)
-# print(board.board[0].sees)
 
 # from utils import *
 #
