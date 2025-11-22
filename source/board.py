@@ -5,7 +5,7 @@ from typing import Optional, Iterable, overload
 from common.types import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 
-ALL_OPTIONS: list[int] = list(range(1, 10))
+ALL_OPTIONS: set[int] = set(range(1, 10))
 
 
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:
@@ -20,17 +20,33 @@ def _get_parent_box_from_coords(x: int, y: int) -> int:
     return (x // 3) + (y // 3) * 3
 
 
+def get_all_values(self, from_: Iterable[Cell]) -> set[int]:
+    return set(map(lambda cell: cell.value, from_))
+
+
 @dataclass
 class Cell:
     index: int
     _parent: Board
     
     value: Optional[int] = None
-    _possible_options: list[int] = field(default_factory=lambda: ALL_OPTIONS)
+    _possible_options: Optional[set[int]] = field(default_factory=lambda: ALL_OPTIONS)
     
-    corner_candidates_user: list[int] = field(default_factory=list)
-    central_candidates_user: list[int] = field(default_factory=list)
+    corner_candidates: list[int] = field(default_factory=list)
+    central_candidates: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
+    
+    def __post_init__(self) -> None:
+        self._parent.rows[self.y].add(self)
+        self._parent.columns[self.x].add(self)
+        self._parent.boxes[self.parent_box].add(self)
+        
+        # # figure out which numbers this cell can and can't be
+        # if self.value is not None:
+        #     # if this cell's value is already set,
+        #     #   then we don't have to calculate its possibilities
+        #     self._possible_options = None
+        #     return
     
     @property
     def x(self) -> int:
@@ -51,12 +67,22 @@ class Cell:
     @property
     def parent_box(self) -> int:
         return _get_parent_box_from_coords(*self.coords)
+    
+    def __str__(self) -> str:
+        return self.value if self.value is not None else "-"
+    
+    def __repr__(self) -> str:
+        return self._possible_options if self._possible_options is not None else f".{self.value}."
 
 
 class Board:
     def __init__(self, board: board_matrix_raw) -> None:
         _flat_board: board_flat_raw  = flatten_matrix_to_1d_tuple(board)
         self.board: board_flat = self._convert_ints_to_cells(_flat_board)
+        
+        self.rows: list[set[Cell]] = [set() for _ in range(9)].copy()
+        self.columns: list[set[Cell]] = [set() for _ in range(9)].copy()
+        self.boxes: list[set[Cell]] = [set() for _ in range(9)].copy()
     
     def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
         return tuple([Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)])
@@ -92,9 +118,9 @@ class Board:
             case "value":
                 self.board[index].value = input_
             case "corner":
-                self.board[index].corner_candidates_user.append(input_)
+                self.board[index].corner_candidates.append(input_)
             case "centre":
-                self.board[index].central_candidates_user.append(input_)
+                self.board[index].central_candidates.append(input_)
             case "colour":
                 self.board[index].colours.append(input_)
             case _:
