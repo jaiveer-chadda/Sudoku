@@ -20,11 +20,11 @@ def _get_parent_box_from_coords(x: int, y: int) -> int:
     return (x // 3) + (y // 3) * 3
 
 
-def get_all_values(self, from_: Iterable[Cell]) -> set[int]:
+def get_all_values(from_: Iterable[Cell]) -> set[int]:
     return set(map(lambda cell: cell.value, from_))
 
 
-@dataclass
+@dataclass(eq=False)
 class Cell:
     index: int
     _parent: Board
@@ -69,20 +69,23 @@ class Cell:
         return _get_parent_box_from_coords(*self.coords)
     
     def __str__(self) -> str:
-        return self.value if self.value is not None else "-"
+        return str(self.value) if self.value is not None else "-"
     
     def __repr__(self) -> str:
-        return self._possible_options if self._possible_options is not None else f".{self.value}."
+        return str(self._possible_options) if self._possible_options is not None else f".{self.value}."
 
 
 class Board:
     def __init__(self, board: board_matrix_raw) -> None:
+        
+        self.rows: list[set[Cell]] = [set() for _ in range(9)]
+        self.columns: list[set[Cell]] = [set() for _ in range(9)]
+        self.boxes: list[set[Cell]] = [set() for _ in range(9)]
+        
+        self.board: Optional[board_flat] = None  # just initialising the property
+        
         _flat_board: board_flat_raw  = flatten_matrix_to_1d_tuple(board)
         self.board: board_flat = self._convert_ints_to_cells(_flat_board)
-        
-        self.rows: list[set[Cell]] = [set() for _ in range(9)].copy()
-        self.columns: list[set[Cell]] = [set() for _ in range(9)].copy()
-        self.boxes: list[set[Cell]] = [set() for _ in range(9)].copy()
     
     def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
         return tuple([Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)])
@@ -144,7 +147,7 @@ class Board:
         """.format(
             *[f"{i.value if i.value not in (0, None) else " "}" for i in self.board]
         ))
-    
+
     def __repr__(self) -> str:
         return "".join(
             [f"{
