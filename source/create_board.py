@@ -11,6 +11,8 @@ from common.functions.base_64_ import encode_b64
 def create_board_json(board_list: tuple[int, ...]) -> None:
     output_buffer: list[str] = ['{\n  "board_positions": {']
     
+    # iterate through the given list,
+    #   and create a text file with that info in a json format
     for i in range(BOARD_SIZE ** 2):
         output_buffer.append(f"""
         "{i}": {{
@@ -22,6 +24,9 @@ def create_board_json(board_list: tuple[int, ...]) -> None:
     
     output: str = "".join(output_buffer)
     
+    # add a board code to the end of a file,
+    #   which just makes it so that every board I use/test has a unique identifier,
+    #   without making them sequential
     board_code: str = encode_b64("".join(map(str, board_list)))
     with open(f"resources/boards/board_{board_code}.json", 'w') as f:
         f.write(output)

@@ -12,5 +12,5 @@ def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[
     return tuple(chain.from_iterable(list_to_flatten))
 
 
-def get_all_values(from_: Iterable[Cell_]) -> set[int]:
+def get_set_of_values_from_cells(from_: Iterable[Cell_]) -> set[int]:
     return set(map(lambda cell: cell.value, from_))
