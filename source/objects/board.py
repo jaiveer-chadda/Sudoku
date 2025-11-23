@@ -1,39 +1,20 @@
 from dataclasses import dataclass, field
-from itertools import chain
 from typing import Optional, Iterable, overload
 
-from common.constants import BOARD_SIZE, BOX_SIZE
-from common.types_ import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
+# noinspection PyUnresolvedReferences
+from common.constants import BOARD_SIZE, ALL_OPTIONS_SET
+# noinspection PyUnresolvedReferences
+from common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
+
+# noinspection PyUnresolvedReferences
+from common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
+# noinspection PyUnresolvedReferences
+from common.functions.data_manipulation import flatten_matrix_to_1d_tuple
+# noinspection PyUnresolvedReferences
+from common.functions.output_formatting import format_set, get_board
 
 
-ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))
-ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))
-
-
-def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:
-    return tuple(chain.from_iterable(list_to_flatten))
-    
-
-def _get_index_from_coords(x: int, y: int) -> int:
-    return (x % BOARD_SIZE) + (y * BOARD_SIZE)
-
-
-def _get_parent_box_from_coords(x: int, y: int) -> int:
-    return (x // BOX_SIZE) + (y // BOX_SIZE) * BOX_SIZE
-
-
-def get_all_values(from_: Iterable[Cell]) -> set[int]:
-    return set(map(lambda cell: cell.value, from_))
-
-
-def format_set(input_set: set[int]) -> str:
-    return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=BOARD_SIZE else ""}" for i in ALL_OPTIONS])+"} "
-
-
-def format_set_2(input_set: set[int]) -> str:
-    return "".join([f"{i if i in input_set else " "}{" " if i!=BOARD_SIZE else ""}" for i in ALL_OPTIONS])+" "
-
-
+# eq=False just fixes some functionality when Cells are used in sets
 @dataclass(eq=False)
 class Cell:
     index: int
@@ -80,11 +61,11 @@ class Cell:
     
     @coords.setter
     def coords(self, xy: coordinates):
-        self.index = _get_index_from_coords(*xy)
+        self.index = get_index_from_coords(*xy)
     
     @property
     def parent_box(self) -> int:
-        return _get_parent_box_from_coords(*self.coords)
+        return get_parent_box_from_coords(*self.coords)
     
     @property
     def sees(self) -> set[Cell]:
@@ -155,7 +136,7 @@ class Board:
                 "or 'coords: tuple[int, int]', but not both."
             )
         
-        index: int = _get_index_from_coords(*coords) if coords is not None else index
+        index: int = get_index_from_coords(*coords) if coords is not None else index
         
         if (input_ is colour) and type_ in ("value", "corner", "centre"):
             raise TypeError("'input_' must be of type 'int'")
@@ -175,32 +156,9 @@ class Board:
             print(f"{format_set(cell.possible_options)}", end=("\n" if i % BOARD_SIZE == BOARD_SIZE-1 else ""))
     
     def __str__(self) -> str:
-        return ("""
-        ┌───────┬───────┬───────┐
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        ├───────┼───────┼───────┤
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        ├───────┼───────┼───────┤
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        │ {} {} {} │ {} {} {} │ {} {} {} │
-        └───────┴───────┴───────┘
-        """.format(
-            *[f"{i.value if i.value not in (0, None) else " "}" for i in self.board]
-        ))
+        return get_board(self.board, draw_box_borders=True)
 
     def __repr__(self) -> str:
-        return "".join(
-            [f"{
-                val if (val := self.board[i].value)!=0 else " "
-            }{
-                "\n" if i % BOARD_SIZE == BOARD_SIZE-1 else " "
-            }"
-             for i in range(len(self.board))]
-        )
+        return get_board(self.board, draw_box_borders=False)
 
 

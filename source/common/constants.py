@@ -1,16 +1,20 @@
 from math import sqrt
 
-from common.types_ import board_matrix_raw  # this may show an error, but it's correct
+# noinspection PyUnresolvedReferences
+from common.types_ import board_matrix_raw
 
 
 def _int_sqrt(int_: int) -> int:
-    if not isinstance(result := sqrt(int_), int):
-        raise ValueError("sqrt(int_) must be an integer")
+    if not isinstance(result := int(sqrt(int_)), int):
+        raise ValueError(f"sqrt(int_) must be an integer\n{int_=}, {sqrt(int_)=}, {result=}")
     return int(result)
 
 
 BOARD_SIZE: int = 9
 BOX_SIZE: int = _int_sqrt(BOARD_SIZE)
+
+ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))
+ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))
 
 
 # solved

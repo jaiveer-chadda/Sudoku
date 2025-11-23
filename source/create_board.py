@@ -1,5 +1,6 @@
+# noinspection PyUnresolvedReferences
+from objects.board import flatten_matrix_to_1d_tuple
 from common.constants import BOARD_SIZE, raw_board
-from board import flatten_matrix_to_1d_tuple
 
 
 def create_board_json(board: tuple[int, ...]) -> None:
@@ -16,7 +17,7 @@ def create_board_json(board: tuple[int, ...]) -> None:
     
     output: str = "".join(output_buffer)
     
-    with open('board.json', 'w') as f:
+    with open('resources/boards/board.json', 'w') as f:
         f.write(output)
 
 
