@@ -1,4 +1,4 @@
-from types_ import board_matrix_raw
+from common.types_ import board_matrix_raw  # this may show an error, but it's correct
 
 SUDOKU_BOARD_SIZE: int = 9
 
