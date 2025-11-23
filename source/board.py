@@ -2,10 +2,12 @@ from dataclasses import dataclass, field
 from itertools import chain
 from typing import Optional, Iterable, overload
 
+from common.constants import BOARD_SIZE, BOX_SIZE
 from common.types_ import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 
-ALL_OPTIONS: set[int] = set(range(1, 10))
+ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))
+ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))
 
 
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:
@@ -13,11 +15,11 @@ def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[
     
 
 def _get_index_from_coords(x: int, y: int) -> int:
-    return (x % 9) + (y * 9)
+    return (x % BOARD_SIZE) + (y * BOARD_SIZE)
 
 
 def _get_parent_box_from_coords(x: int, y: int) -> int:
-    return (x // 3) + (y // 3) * 3
+    return (x // BOX_SIZE) + (y // BOX_SIZE) * BOX_SIZE
 
 
 def get_all_values(from_: Iterable[Cell]) -> set[int]:
@@ -25,11 +27,11 @@ def get_all_values(from_: Iterable[Cell]) -> set[int]:
 
 
 def format_set(input_set: set[int]) -> str:
-    return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=9 else ""}" for i in range(1, 10)])+"} "
+    return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=BOARD_SIZE else ""}" for i in ALL_OPTIONS])+"} "
 
 
 def format_set_2(input_set: set[int]) -> str:
-    return "".join([f"{i if i in input_set else " "}{" " if i!=9 else ""}" for i in range(1, 10)])+" "
+    return "".join([f"{i if i in input_set else " "}{" " if i!=BOARD_SIZE else ""}" for i in ALL_OPTIONS])+" "
 
 
 @dataclass(eq=False)
@@ -38,7 +40,7 @@ class Cell:
     _parent: Board
     
     value: Optional[int] = None
-    possible_options: set[int] = field(default_factory=lambda: ALL_OPTIONS.copy())
+    possible_options: set[int] = field(default_factory=lambda: ALL_OPTIONS_SET.copy())
     
     corner_candidates: list[int] = field(default_factory=list)
     central_candidates: list[int] = field(default_factory=list)
@@ -66,11 +68,11 @@ class Cell:
 
     @property
     def x(self) -> int:
-        return self.index % 9
+        return self.index % BOARD_SIZE
     
     @property
     def y(self) -> int:
-        return self.index // 9
+        return self.index // BOARD_SIZE
     
     @property
     def coords(self) -> coordinates:
@@ -97,9 +99,9 @@ class Cell:
 
 class Board:
     def __init__(self, board: board_matrix_raw, *, do_auto_solve: bool=True) -> None:
-        self.columns: list[set[Cell]] = [set() for _ in range(9)]
-        self.rows: list[set[Cell]] = [set() for _ in range(9)]
-        self.boxes: list[set[Cell]] = [set() for _ in range(9)]
+        self.columns: list[set[Cell]] = [set() for _ in range(BOARD_SIZE)]
+        self.rows: list[set[Cell]] = [set() for _ in range(BOARD_SIZE)]
+        self.boxes: list[set[Cell]] = [set() for _ in range(BOARD_SIZE)]
         
         self.board: Optional[board_flat] = None  # just initialising the property
         
@@ -161,49 +163,16 @@ class Board:
             raise TypeError("'input_' must be of type 'colour'")
         
         match type_:
-            case "value":
-                self.board[index].value = input_
-            case "corner":
-                self.board[index].corner_candidates.append(input_)
-            case "centre":
-                self.board[index].central_candidates.append(input_)
-            case "colour":
-                self.board[index].colours.append(input_)
+            case "value":  self.board[index].value = input_
+            case "corner": self.board[index].corner_candidates.append(input_)
+            case "centre": self.board[index].central_candidates.append(input_)
+            case "colour": self.board[index].colours.append(input_)
             case _:
                 raise ValueError("Invalid cell type")
     
     def print_candidates(self) -> None:
         for i, cell in enumerate(self.board):
-            print(f"{format_set(cell.possible_options)}", end=("\n" if i%9==8 else ""))
-        
-        # line: str = "│ {} {} {} │ {} {} {} │ {} {} {} │"
-        # blank: str = " "*18
-        # empty_line: str = f"│ {blank} {blank} {blank} │ {blank} {blank} {blank} │ {blank} {blank} {blank} │"
-        # to_format: str = f"""
-        # ┌{'—'*58}┬{'—'*58}┬{'—'*58}┐
-        # {line}
-        # {empty_line}
-        # {line}
-        # {empty_line}
-        # {line}
-        # ├{'—'*58}┼{'—'*58}┼{'—'*58}┤
-        # {line}
-        # {empty_line}
-        # {line}
-        # {empty_line}
-        # {line}
-        # ├{'—'*58}┼{'—'*58}┼{'—'*58}┤
-        # {line}
-        # {empty_line}
-        # {line}
-        # {empty_line}
-        # {line}
-        # └{'—'*58}┴{'—'*58}┴{'—'*58}┘
-        # """
-        #
-        # print(to_format.format(
-        #     *[format_set_2(i.possible_options) for i in self.board]
-        # ))
+            print(f"{format_set(cell.possible_options)}", end=("\n" if i % BOARD_SIZE == BOARD_SIZE-1 else ""))
     
     def __str__(self) -> str:
         return ("""
@@ -229,7 +198,7 @@ class Board:
             [f"{
                 val if (val := self.board[i].value)!=0 else " "
             }{
-                "\n" if i % 9 == 8 else " "
+                "\n" if i % BOARD_SIZE == BOARD_SIZE-1 else " "
             }"
              for i in range(len(self.board))]
         )

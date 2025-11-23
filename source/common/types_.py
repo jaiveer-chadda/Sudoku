@@ -1,6 +1,6 @@
 from typing import TypeVar, Literal, Iterable
 
-T = TypeVar('T')
+T: TypeVar = TypeVar('T')
 
 type colour = int
 type coordinates = tuple[int, int]

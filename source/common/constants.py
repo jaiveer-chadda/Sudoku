@@ -1,6 +1,17 @@
+from math import sqrt
+
 from common.types_ import board_matrix_raw  # this may show an error, but it's correct
 
-SUDOKU_BOARD_SIZE: int = 9
+
+def _int_sqrt(int_: int) -> int:
+    if not isinstance(result := sqrt(int_), int):
+        raise ValueError("sqrt(int_) must be an integer")
+    return int(result)
+
+
+BOARD_SIZE: int = 9
+BOX_SIZE: int = _int_sqrt(BOARD_SIZE)
+
 
 # solved
 raw_board: board_matrix_raw = [
