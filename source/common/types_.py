@@ -6,6 +6,7 @@ type colour = int
 type coordinates = tuple[int, int]
 
 type Cell_ = 'Cell'
+type Board_ = 'Board'
 
 type cell_insert_type = Literal["value", "corner", "centre", "colour"]
 
