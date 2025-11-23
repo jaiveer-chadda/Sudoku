@@ -1,10 +1,12 @@
 # — Project Imports ——————————————————————————————————————————————————————————————————————————
 # ———— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, board_input
+from source.common.types_ import board_matrix_raw
 # ———— Objects ——————————————————————————————————
 from source.objects.board import flatten_matrix_to_1d_tuple
-# ———— Functions ————————————————————————————————
-from source.common.utils.base_64_ import encode_b64
+# ———— Utils ————————————————————————————————
+# from source.common.utils.base_64_ import encode_b64
+from source.common.utils.hashing import hash_to_8_chars
 # ————————————————————————————————————————————————————————————————————————————————————————————
 
 
@@ -24,18 +26,27 @@ def create_board_json(board_list: tuple[int, ...]) -> None:
     
     output: str = "".join(output_buffer)
     
-    # add a board code to the end of a file,
+    # add a board code/hash to the end of a file,
     #   which just makes it so that every board I use/test has a unique identifier,
     #   without making them sequential
-    board_code: str = encode_b64("".join(map(str, board_list)))
-    with open(f"resources/boards/board_{board_code}.json", 'w') as f:
+    
+    # board_hash: str = encode_b64(
+    board_hash: str = hash_to_8_chars(
+        int(
+            "".join(
+                map(str, board_list)
+            )
+        )
+    )
+    with open(f"source/resources/boards/board_{board_hash}.json", 'w') as f:
         f.write(output)
 
 
-def from_matrix(board: list[list[int]]) -> None:
+def from_matrix(board: board_matrix_raw) -> None:
     create_board_json(flatten_matrix_to_1d_tuple(board))
 
 
+# ————————————————————————————————————————————————————————————————————————————————————————————
 def main() -> None:
     from_matrix(board_input)
 
