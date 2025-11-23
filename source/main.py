@@ -1,4 +1,4 @@
-from get_board import raw_board
+from common.constants import raw_board
 from board import Board
 
 

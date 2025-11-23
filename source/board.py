@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from itertools import chain
 from typing import Optional, Iterable, overload
 
-from common.types import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
+from common.types_ import T, board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 
 ALL_OPTIONS: set[int] = set(range(1, 10))
