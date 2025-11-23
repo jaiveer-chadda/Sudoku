@@ -3,7 +3,7 @@ from math import sqrt
 
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from common.types_ import board_matrix_raw
+from ..common.types_ import board_matrix_raw
 
 
 def _int_sqrt(int_: int) -> int:

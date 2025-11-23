@@ -3,8 +3,8 @@ from typing import Literal
 
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from common.constants import BOARD_SIZE, ALL_OPTIONS
-from common.types_ import board_flat
+from ..common.constants import BOARD_SIZE, ALL_OPTIONS
+from ..common.types_ import board_flat
 
 
 def format_set(input_set: set[int]) -> str:
