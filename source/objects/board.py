@@ -98,5 +98,3 @@ class Board:
 
     def __repr__(self) -> str:
         return get_board(self.board, draw_box_borders=False)
-
-

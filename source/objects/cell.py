@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 # noinspection PyUnresolvedReferences
-# from objects.board import Board
-
-# noinspection PyUnresolvedReferences
 from common.constants import BOARD_SIZE, ALL_OPTIONS_SET
 # noinspection PyUnresolvedReferences
 from common.types_ import colour, coordinates, Board_
