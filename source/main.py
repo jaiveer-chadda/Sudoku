@@ -1,9 +1,9 @@
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from .common.constants import raw_board
+from .common.constants import board_input
 # ———— Objects ——————————————————————————————————
 from .objects.board import Board
 
 
-board: Board = Board(raw_board)
+board: Board = Board(board_input)
 print(board)

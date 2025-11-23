@@ -1,6 +1,6 @@
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from .common.constants import BOARD_SIZE, raw_board
+from .common.constants import BOARD_SIZE, board_input
 # ———— Objects ——————————————————————————————————
 from .objects.board import flatten_matrix_to_1d_tuple
 # ———— Functions ————————————————————————————————
@@ -36,7 +36,7 @@ def from_matrix(board: list[list[int]]) -> None:
 
 
 def main() -> None:
-    from_matrix(raw_board)
+    from_matrix(board_input)
 
 
 if __name__ == "__main__":
