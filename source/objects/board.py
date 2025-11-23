@@ -1,7 +1,7 @@
-# — External Imports ————————————————————————————
+# — External Imports —————————————————————————————————————————————————————————————————————————
 from typing import Optional, Iterable, overload
 
-# — Project Imports —————————————————————————————
+# — Project Imports ——————————————————————————————————————————————————————————————————————————
 # ———— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE
 from source.common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
@@ -13,6 +13,7 @@ from source.objects.cell import Cell
 from source.common.functions.calculations import get_index_from_coords
 from source.common.functions.data_manipulation import flatten_matrix_to_1d_tuple
 from source.common.functions.output_formatting import format_set, get_board
+# ————————————————————————————————————————————————————————————————————————————————————————————
 
 
 class Board:

@@ -1,6 +1,7 @@
-# — Project Imports —————————————————————————————
+# — Project Imports ——————————————————————————————————————————————————————————————————————————
 # ———— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, BOX_SIZE
+# ————————————————————————————————————————————————————————————————————————————————————————————
 
 
 def get_index_from_coords(x: int, y: int) -> int:

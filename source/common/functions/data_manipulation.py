@@ -1,10 +1,11 @@
-# — External Imports —————————————————————————————
+# — External Imports ——————————————————————————————————————————————————————————————————————————
 from itertools import chain
 from typing import Iterable
 
-# — Project Imports —————————————————————————————
+# — Project Imports ——————————————————————————————————————————————————————————————————————————
 # ———— Consts & Types ———————————————————————————
 from source.common.types_ import T, Cell_
+# ————————————————————————————————————————————————————————————————————————————————————————————
 
 
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:
