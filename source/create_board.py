@@ -2,14 +2,16 @@
 from objects.board import flatten_matrix_to_1d_tuple
 from common.constants import BOARD_SIZE, raw_board
 
+from common.functions.base_64_ import encode_b64
 
-def create_board_json(board: tuple[int, ...]) -> None:
+
+def create_board_json(board_list: tuple[int, ...]) -> None:
     output_buffer: list[str] = ['{\n  "board_positions": {']
     
     for i in range(BOARD_SIZE ** 2):
         output_buffer.append(f"""
         "{i}": {{
-          "main": {board[i]},
+          "main": {board_list[i]},
           "corner_candidates": [],
           "central_candidates": [],
           "colours": []
@@ -17,7 +19,8 @@ def create_board_json(board: tuple[int, ...]) -> None:
     
     output: str = "".join(output_buffer)
     
-    with open('resources/boards/board.json', 'w') as f:
+    board_code: str = encode_b64("".join(map(str, board_list)))
+    with open(f"resources/boards/board_{board_code}.json", 'w') as f:
         f.write(output)
 
 
