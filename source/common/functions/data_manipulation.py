@@ -4,7 +4,7 @@ from typing import Iterable
 
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from ..common.types_ import T, Cell_
+from source.common.types_ import T, Cell_
 
 
 def flatten_matrix_to_1d_tuple(list_to_flatten: Iterable[Iterable[T]]) -> tuple[T, ...]:

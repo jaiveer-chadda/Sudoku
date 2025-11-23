@@ -8,7 +8,7 @@ from ..common.constants import BOARD_SIZE, ALL_OPTIONS_SET
 from ..common.types_ import colour, coordinates, Board_
 
 # ———— Functions ————————————————————————————————
-from ..functions.calculations import get_index_from_coords, get_parent_box_from_coords
+from source.common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
 
 
 # eq=False just fixes some functionality when Cells are used in sets
