@@ -2,6 +2,7 @@ from board import flatten_matrix_to_1d_tuple
 
 SUDOKU_BOARD_SIZE: int = 9
 
+# solved
 raw_board: list[list[int]] = [
     [0, 0, 2, 3, 7, 0, 1, 5, 4],
     [0, 5, 1, 0, 4, 0, 8, 0, 2],
@@ -14,6 +15,20 @@ raw_board: list[list[int]] = [
     [1, 0, 0, 0, 0, 3, 5, 0, 0]
 ]
 
+# # semi-unsolvable
+# raw_board: list[list[int]] = [
+#     [0, 1, 2, 0, 7, 0, 0, 0, 3],
+#     [0, 7, 0, 1, 3, 4, 2, 0, 0],
+#     [3, 0, 6, 2, 8, 0, 0, 7, 0],
+#     [0, 0, 7, 4, 9, 3, 0, 0, 5],
+#     [1, 9, 4, 5, 2, 8, 0, 3, 0],
+#     [5, 8, 3, 0, 1, 0, 9, 0, 0],
+#     [7, 0, 0, 0, 0, 0, 0, 0, 8],
+#     [0, 0, 0, 8, 0, 2, 0, 0, 0],
+#     [0, 0, 8, 0, 0, 0, 4, 0, 0]
+# ]
+
+# # unsolvable at the moment
 # raw_board: list[list[int]] = [
 #     [9, 1, 7, 0, 0, 0, 0, 0, 0],
 #     [0, 0, 0, 6, 0, 0, 0, 0, 9],
