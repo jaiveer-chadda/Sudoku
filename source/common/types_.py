@@ -1,6 +1,6 @@
+# — External Imports ————————————————————————————
 from typing import TypeVar, Literal, Iterable
 
-# from objects.cell import Cell
 
 T: TypeVar = TypeVar('T')
 

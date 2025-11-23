@@ -1,11 +1,15 @@
+# — External Imports ————————————————————————————
 from dataclasses import dataclass, field
 from typing import Optional
 
+# — Project Imports —————————————————————————————
+# ———— Consts & Types ———————————————————————————
 # noinspection PyUnresolvedReferences
 from common.constants import BOARD_SIZE, ALL_OPTIONS_SET
 # noinspection PyUnresolvedReferences
 from common.types_ import colour, coordinates, Board_
 
+# ———— Functions ————————————————————————————————
 # noinspection PyUnresolvedReferences
 from common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
 

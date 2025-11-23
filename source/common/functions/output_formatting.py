@@ -1,3 +1,5 @@
+# — Project Imports —————————————————————————————
+# ———— Consts & Types ———————————————————————————
 # noinspection PyUnresolvedReferences
 from common.constants import BOARD_SIZE, ALL_OPTIONS
 # noinspection PyUnresolvedReferences

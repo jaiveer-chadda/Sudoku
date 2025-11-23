@@ -1,5 +1,8 @@
+# — External Imports —————————————————————————————
 from math import sqrt
 
+# — Project Imports —————————————————————————————
+# ———— Consts & Types ———————————————————————————
 # noinspection PyUnresolvedReferences
 from common.types_ import board_matrix_raw
 

@@ -1,6 +1,9 @@
+# — External Imports —————————————————————————————
 from itertools import chain
 from typing import Iterable
 
+# — Project Imports —————————————————————————————
+# ———— Consts & Types ———————————————————————————
 # noinspection PyUnresolvedReferences
 from common.types_ import T, Cell_
 
