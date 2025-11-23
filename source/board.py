@@ -96,7 +96,7 @@ class Cell:
 
 
 class Board:
-    def __init__(self, board: board_matrix_raw) -> None:
+    def __init__(self, board: board_matrix_raw, *, do_auto_solve: bool=True) -> None:
         self.columns: list[set[Cell]] = [set() for _ in range(9)]
         self.rows: list[set[Cell]] = [set() for _ in range(9)]
         self.boxes: list[set[Cell]] = [set() for _ in range(9)]
@@ -104,26 +104,25 @@ class Board:
         self.board: Optional[board_flat] = None  # just initialising the property
         
         _flat_board: board_flat_raw  = flatten_matrix_to_1d_tuple(board)
-        self.board: board_flat = self._convert_ints_to_cells(_flat_board)
+        self.board: board_flat = self._create_board_from_ints(_flat_board)
+        if do_auto_solve:
+            self._pre_backtracking_solve()
     
-    def _convert_ints_to_cells(self, int_list: Iterable[int]) -> board_flat:
+    def _create_board_from_ints(self, int_list: Iterable[int]) -> board_flat:
         return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
 
-    def calculate_candidates(self):
+    def _pre_backtracking_solve(self):
         something_changed: bool = True
-        
         # repeat until you can make no further progress
         while something_changed:
             something_changed = False
-            
             # iterate through every cell in the board
             for cell_to_check in self.board:
                 # ignore the cells that don't have a value
                 if cell_to_check.value is None:
                     continue
-                
                 # for all cells with a value, check which cells it can see,
-                #  and remove its value from those cells
+                #  and remove its value from those seen cells
                 for cell_to_change in cell_to_check.sees:
                     try:
                         cell_to_change.remove_from_options(cell_to_check.value)

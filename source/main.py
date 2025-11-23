@@ -7,8 +7,6 @@ board: Board = Board(raw_board)
 
 print(board)
 
-board.calculate_candidates()
-
 print(board)
 
 
