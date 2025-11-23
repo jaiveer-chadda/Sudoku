@@ -7,4 +7,11 @@ from source.objects.board import Board
 
 
 board: Board = Board(board_input)
-print(board)
+
+
+def main() -> None:
+    print(board)
+
+
+if __name__ == "__main__":
+    main()
