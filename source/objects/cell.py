@@ -4,8 +4,8 @@ from typing import Optional
 
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from ..common.constants import BOARD_SIZE, ALL_OPTIONS_SET
-from ..common.types_ import colour, coordinates, Board_
+from source.common.constants import BOARD_SIZE, ALL_OPTIONS_SET
+from source.common.types_ import colour, coordinates, Board_
 
 # ———— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords, get_parent_box_from_coords

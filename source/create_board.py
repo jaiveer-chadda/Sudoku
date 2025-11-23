@@ -1,8 +1,8 @@
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from .common.constants import BOARD_SIZE, board_input
+from source.common.constants import BOARD_SIZE, board_input
 # ———— Objects ——————————————————————————————————
-from .objects.board import flatten_matrix_to_1d_tuple
+from source.objects.board import flatten_matrix_to_1d_tuple
 # ———— Functions ————————————————————————————————
 from source.common.functions.base_64_ import encode_b64
 

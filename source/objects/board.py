@@ -3,11 +3,11 @@ from typing import Optional, Iterable, overload
 
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-from ..common.constants import BOARD_SIZE
-from ..common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
+from source.common.constants import BOARD_SIZE
+from source.common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 # ———— Objects ——————————————————————————————————
-from ..objects.cell import Cell
+from source.objects.cell import Cell
 
 # ———— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords
