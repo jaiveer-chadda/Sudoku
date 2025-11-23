@@ -2,7 +2,6 @@
 # ———— Consts & Types ———————————————————————————
 from common.constants import BOARD_SIZE, raw_board
 # ———— Objects ——————————————————————————————————
-# noinspection PyUnresolvedReferences
 from objects.board import flatten_matrix_to_1d_tuple
 # ———— Functions ————————————————————————————————
 from common.functions.base_64_ import encode_b64

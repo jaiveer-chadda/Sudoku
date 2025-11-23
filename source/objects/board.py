@@ -3,21 +3,15 @@ from typing import Optional, Iterable, overload
 
 # — Project Imports —————————————————————————————
 # ———— Consts & Types ———————————————————————————
-# noinspection PyUnresolvedReferences
 from common.constants import BOARD_SIZE, ALL_OPTIONS_SET
-# noinspection PyUnresolvedReferences
 from common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
 # ———— Objects ——————————————————————————————————
-# noinspection PyUnresolvedReferences
 from objects.cell import Cell
 
 # ———— Functions ————————————————————————————————
-# noinspection PyUnresolvedReferences
 from common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
-# noinspection PyUnresolvedReferences
 from common.functions.data_manipulation import flatten_matrix_to_1d_tuple
-# noinspection PyUnresolvedReferences
 from common.functions.output_formatting import format_set, get_board
 
 
