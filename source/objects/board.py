@@ -10,9 +10,9 @@ from common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, 
 from objects.cell import Cell
 
 # ———— Functions ————————————————————————————————
-from common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
-from common.functions.data_manipulation import flatten_matrix_to_1d_tuple
-from common.functions.output_formatting import format_set, get_board
+from functions.calculations import get_index_from_coords, get_parent_box_from_coords
+from functions.data_manipulation import flatten_matrix_to_1d_tuple
+from functions.output_formatting import format_set, get_board
 
 
 class Board:

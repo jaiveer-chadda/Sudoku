@@ -4,7 +4,7 @@ from common.constants import BOARD_SIZE, raw_board
 # ———— Objects ——————————————————————————————————
 from objects.board import flatten_matrix_to_1d_tuple
 # ———— Functions ————————————————————————————————
-from common.functions.base_64_ import encode_b64
+from functions.base_64_ import encode_b64
 
 
 def create_board_json(board_list: tuple[int, ...]) -> None:
