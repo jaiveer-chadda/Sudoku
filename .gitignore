@@ -1,2 +1,10 @@
-/.idea/
+# JetBrains
 Sudoku.iml
+.idea/
+
+# System/Env
+.DS_Store
+
+# Python
+*.pyc
+__pycache__/
