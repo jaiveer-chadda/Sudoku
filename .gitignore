@@ -7,4 +7,5 @@ Sudoku.iml
 
 # Python
 *.pyc
+__init__.py
 __pycache__/
