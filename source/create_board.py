@@ -38,7 +38,7 @@ def create_board_json(board_list: tuple[int, ...]) -> None:
             )
         )
     )
-    with open(f"source/resources/boards/board_{board_hash}.json", 'w') as f:
+    with open(f"resources/boards/board_{board_hash}.json", 'w') as f:
         f.write(output)
 
 
