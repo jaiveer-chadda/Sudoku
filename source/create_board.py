@@ -1,13 +1,13 @@
-# — Project Imports ——————————————————————————————————————————————————————————————————————————
-# ———— Consts & Types ———————————————————————————
+#—— Project Imports ——————————————————————————————————————————————————————————————————————————
+#————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, board_input
 from source.common.types_ import board_matrix_raw
-# ———— Objects ——————————————————————————————————
+#————— Objects ——————————————————————————————————
 from source.objects.board import flatten_matrix_to_1d_tuple
-# ———— Utils ————————————————————————————————
+#————— Utils ————————————————————————————————
 # from source.common.utils.base_64_ import encode_b64
 from source.common.utils.hashing import hash_to_8_chars
-# ————————————————————————————————————————————————————————————————————————————————————————————
+#—————————————————————————————————————————————————————————————————————————————————————————————
 
 
 def create_board_json(board_list: tuple[int, ...]) -> None:
@@ -46,7 +46,7 @@ def from_matrix(board: board_matrix_raw) -> None:
     create_board_json(flatten_matrix_to_1d_tuple(board))
 
 
-# ————————————————————————————————————————————————————————————————————————————————————————————
+#—————————————————————————————————————————————————————————————————————————————————————————————
 def main() -> None:
     from_matrix(board_input)
 

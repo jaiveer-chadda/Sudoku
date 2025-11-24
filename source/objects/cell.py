@@ -1,15 +1,15 @@
-# — External Imports —————————————————————————————————————————————————————————————————————————
+#—— External Imports —————————————————————————————————————————————————————————————————————————
 from dataclasses import dataclass, field
 from typing import Optional
 
-# — Project Imports ——————————————————————————————————————————————————————————————————————————
-# ———— Consts & Types ———————————————————————————
+#—— Project Imports ——————————————————————————————————————————————————————————————————————————
+#————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS_SET
 from source.common.types_ import colour, coordinates, Board_
 
-# ———— Functions ————————————————————————————————
+#————— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
-# ————————————————————————————————————————————————————————————————————————————————————————————
+#—————————————————————————————————————————————————————————————————————————————————————————————
 
 
 # eq=False just fixes some functionality when Cells are used in sets
@@ -30,7 +30,7 @@ class Cell:
     central_candidates: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
     
-    # — Initialisation ———————————————————————————————————————————————————————————————————————
+    #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __post_init__(self) -> None:
         self._parent.columns[self.x].add(self)
         self._parent.rows[self.y].add(self)
@@ -44,8 +44,8 @@ class Cell:
         if self.value is not None:
             self.possible_options = {self.value}
     
-    # — General Methods ——————————————————————————————————————————————————————————————————————
-    # ——— remove_from_options ———————————————————
+    #—— General Methods ——————————————————————————————————————————————————————————————————————
+    #———— remove_from_options ———————————————————
     def remove_from_options(self, to_remove: int) -> None:
         self.possible_options.remove(to_remove)
         # if there's only one possible value the cell can be,
@@ -53,18 +53,18 @@ class Cell:
         if len(self.possible_options) == 1:
             self.value = list(self.possible_options)[0]
     
-    # — Property Methods —————————————————————————————————————————————————————————————————————
-    # ——— x —————————————————————————————————————
+    #—— Property Methods —————————————————————————————————————————————————————————————————————
+    #———— x —————————————————————————————————————
     @property
     def x(self) -> int:
         return self.index % BOARD_SIZE
     
-    # ——— y —————————————————————————————————————
+    #———— y —————————————————————————————————————
     @property
     def y(self) -> int:
         return self.index // BOARD_SIZE
     
-    # ——— coords ————————————————————————————————
+    #———— coords ————————————————————————————————
     @property
     def coords(self) -> coordinates:
         return self.x, self.y
@@ -73,20 +73,20 @@ class Cell:
     def coords(self, xy: coordinates):
         self.index = get_index_from_coords(*xy)
     
-    # ——— parent_box ————————————————————————————
+    #———— parent_box ————————————————————————————
     @property
     def parent_box(self) -> int:
         return get_parent_box_from_coords(*self.coords)
     
-    # ——— sees ——————————————————————————————————
+    #———— sees ——————————————————————————————————
     @property
     def sees(self) -> set[Cell]:
         return self._parent.columns[self.x] | self._parent.rows[self.y] | self._parent.boxes[self.parent_box]
     
-    # — Dunder Methods ———————————————————————————————————————————————————————————————————————
+    #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
     def __str__(self) -> str:
         return str(self.value) if self.value is not None else "-"
     
     def __repr__(self) -> str:
         return str(self.possible_options) if self.possible_options is not None else f".{self.value}."
-    # ————————————————————————————————————————————————————————————————————————————————————————
+    #—————————————————————————————————————————————————————————————————————————————————————————

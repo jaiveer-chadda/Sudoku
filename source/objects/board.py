@@ -1,23 +1,23 @@
-# — External Imports —————————————————————————————————————————————————————————————————————————
+#—— External Imports —————————————————————————————————————————————————————————————————————————
 from typing import Optional, Iterable, overload
 
-# — Project Imports ——————————————————————————————————————————————————————————————————————————
-# ———— Consts & Types ———————————————————————————
+#—— Project Imports ——————————————————————————————————————————————————————————————————————————
+#————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE
 from source.common.types_ import board_matrix_raw, board_flat_raw, board_flat, colour, coordinates, cell_insert_type
 
-# ———— Objects ——————————————————————————————————
+#————— Objects ——————————————————————————————————
 from source.objects.cell import Cell
 
-# ———— Functions ————————————————————————————————
+#————— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords
 from source.common.functions.data_manipulation import flatten_matrix_to_1d_tuple
 from source.common.functions.output_formatting import format_set, get_board
-# ————————————————————————————————————————————————————————————————————————————————————————————
+#—————————————————————————————————————————————————————————————————————————————————————————————
 
 
 class Board:
-    # — Initialisation ———————————————————————————————————————————————————————————————————————
+    #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __init__(self, board: board_matrix_raw, *, do_auto_solve: bool=True) -> None:
         self.columns: list[set[Cell]] = [set() for _ in range(BOARD_SIZE)]
         self.rows: list[set[Cell]] = [set() for _ in range(BOARD_SIZE)]
@@ -30,12 +30,12 @@ class Board:
         if do_auto_solve:
             self._pre_backtracking_solve()
     
-    # — Private Methods ——————————————————————————————————————————————————————————————————————
-    # ——— _create_board_from_ints ———————————————
+    #—— Private Methods ——————————————————————————————————————————————————————————————————————
+    #———— _create_board_from_ints ———————————————
     def _create_board_from_ints(self, int_list: Iterable[int]) -> board_flat:
         return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
 
-    # ——— _pre_backtracking_solve ———————————————
+    #———— _pre_backtracking_solve ———————————————
     def _pre_backtracking_solve(self):
         something_changed: bool = True
         # repeat until you can make no further progress
@@ -58,8 +58,8 @@ class Board:
                     except KeyError:
                         pass
                     
-    # — General Methods ——————————————————————————————————————————————————————————————————————
-    # ——— fill_cell —————————————————————————————
+    #—— General Methods ——————————————————————————————————————————————————————————————————————
+    #———— fill_cell —————————————————————————————
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
         pass
@@ -94,15 +94,15 @@ class Board:
             case _:
                 raise ValueError("Invalid cell type")
     
-    # ——— print_candidates ——————————————————————
+    #———— print_candidates ——————————————————————
     def print_candidates(self) -> None:
         for i, cell in enumerate(self.board):
             print(f"{format_set(cell.possible_options)}", end=("\n" if i % BOARD_SIZE == BOARD_SIZE-1 else ""))
     
-    # — Dunder Methods ———————————————————————————————————————————————————————————————————————
+    #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
     def __str__(self) -> str:
         return get_board(self.board, draw_box_borders=True)
 
     def __repr__(self) -> str:
         return get_board(self.board, draw_box_borders=False)
-    # ————————————————————————————————————————————————————————————————————————————————————————
+    #—————————————————————————————————————————————————————————————————————————————————————————
