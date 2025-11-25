@@ -17,12 +17,12 @@ def create_board_json(board_list: tuple[int, ...]) -> None:
     #   and create a text file with that info (in a json format)
     for i in range(BOARD_SIZE ** 2):
         output_buffer.append(f"""
-        "{i}": {{
+        "{i}": {
           "main": {board_list[i]},
           "corner_candidates": [],
           "central_candidates": [],
           "colours": []
-        }}""" + ("," if i != (BOARD_SIZE**2)-1 else "\n  }\n}"))
+        }""" + ("," if i != (BOARD_SIZE**2)-1 else "\n  }\n}"))
     
     output: str = "".join(output_buffer)
     
