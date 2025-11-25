@@ -54,8 +54,10 @@ class Board:
                         cell_to_change.remove_from_options(cell_to_check.value)
                         something_changed = True
                     # if a {{KeyError}} is raised
-                    #   it means that that value wasn't in the cell we tried to remove it from
+                    #   it means that that value wasn't an option in the cell we tried to remove it from
                     #   which doesn't matter, so it's ignored
+                    # it's also easier and quicker to handle it this way,
+                    #   rather than checking whether the value _is_ an option before removing it
                     except KeyError:
                         pass
                     
