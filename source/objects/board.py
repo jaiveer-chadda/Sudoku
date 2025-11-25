@@ -31,12 +31,13 @@ class Board:
             self._pre_backtracking_solve()
     
     #—— Private Methods ——————————————————————————————————————————————————————————————————————
-    #———— _create_board_from_ints ———————————————
+    #———— _create_board_from_ints() ———————————————
     def _create_board_from_ints(self, int_list: Iterable[int]) -> board_flat:
         return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
 
-    #———— _pre_backtracking_solve ———————————————
-    def _pre_backtracking_solve(self):
+    #———— _pre_backtracking_solve() ———————————————
+    def _pre_backtracking_solve(self) -> None:
+        #{{Board._pre_backtracking_solve}}
         something_changed: bool = True
         # repeat until you can make no further progress
         while something_changed:
@@ -52,14 +53,14 @@ class Board:
                     try:
                         cell_to_change.remove_from_options(cell_to_check.value)
                         something_changed = True
-                    # if a KeyError is raised,
+                    # if a {{KeyError}} is raised
                     #   it means that that value wasn't in the cell we tried to remove it from
                     #   which doesn't matter, so it's ignored
                     except KeyError:
                         pass
                     
     #—— General Methods ——————————————————————————————————————————————————————————————————————
-    #———— fill_cell —————————————————————————————
+    #———— fill_cell() —————————————————————————————
     @overload
     def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
         pass
@@ -94,7 +95,7 @@ class Board:
             case _:
                 raise ValueError("Invalid cell type")
     
-    #———— print_candidates ——————————————————————
+    #———— print_candidates() ——————————————————————
     def print_candidates(self) -> None:
         for i, cell in enumerate(self.board):
             print(f"{format_set(cell.possible_options)}", end=("\n" if i % BOARD_SIZE == BOARD_SIZE-1 else ""))
@@ -105,4 +106,5 @@ class Board:
 
     def __repr__(self) -> str:
         return get_board(self.board, draw_box_borders=False)
-    #—————————————————————————————————————————————————————————————————————————————————————————
+
+#———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

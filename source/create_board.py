@@ -5,7 +5,7 @@ from source.common.types_ import board_matrix_raw
 #————— Objects ——————————————————————————————————
 from source.objects.board import flatten_matrix_to_1d_tuple
 #————— Utils ————————————————————————————————
-# from source.common.utils.base_64_ import encode_b64
+#_from source.common.utils.base_64_ import encode_b64
 from source.common.utils.hashing import hash_to_8_chars
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -14,7 +14,7 @@ def create_board_json(board_list: tuple[int, ...]) -> None:
     output_buffer: list[str] = ['{\n  "board_positions": {']
     
     # iterate through the given list,
-    #   and create a text file with that info in a json format
+    #   and create a text file with that info (in a json format)
     for i in range(BOARD_SIZE ** 2):
         output_buffer.append(f"""
         "{i}": {{
@@ -29,12 +29,10 @@ def create_board_json(board_list: tuple[int, ...]) -> None:
     # add a board code/hash to the end of a file,
     #   which just makes it so that every board I use/test has a unique identifier,
     #   without making them sequential
-    
-    # board_hash: str = encode_b64(
-    board_hash: str = hash_to_8_chars(
+    board_hash: str = hash_to_8_chars(  #_encode_b64(
         int(
-            "".join(
-                map(str, board_list)
+            "".join(                    # make sure all the board characters are strings
+                map(str, board_list)    #   then concatenate them, and pass them into the hashing function
             )
         )
     )
@@ -47,6 +45,7 @@ def from_matrix(board: board_matrix_raw) -> None:
 
 
 #—————————————————————————————————————————————————————————————————————————————————————————————
+
 def main() -> None:
     from_matrix(board_input)
 

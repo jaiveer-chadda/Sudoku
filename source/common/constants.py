@@ -8,18 +8,21 @@ from source.common.types_ import board_matrix_raw
 
 
 def _int_sqrt(int_: int) -> int:
+    # just a simple function that asserts that the inputted integer is a square number,
+    #   and returns its square root
     if not isinstance(result := int(sqrt(int_)), int):
         raise ValueError(f"sqrt(int_) must be an integer\n{int_=}, {sqrt(int_)=}, {result=}")
     return int(result)
 
 
-BOARD_SIZE: int = 9
-BOX_SIZE: int = _int_sqrt(BOARD_SIZE)
+BOARD_SIZE: int = 9  # the board dimensions, eg =9 for a standard 9x9 sudoku board
+BOX_SIZE: int = _int_sqrt(BOARD_SIZE)  # the sub-box dimensions (=3 for a standard sudoku board)
 
-ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))
-ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))
+ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))  # a tuple containing the numbers 1 -> 9
+ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))  # a  set  containing the numbers 1 -> 9
 
-# this is just temporary while I create the solver
+#? temp
+#    it's just here while I create the solver
 BOARD_OPTIONS: dict[str, board_matrix_raw] = {
     "easy":
         [  # solved
@@ -59,8 +62,8 @@ BOARD_OPTIONS: dict[str, board_matrix_raw] = {
         ],
 }
 
-# this line's also temporary
-#   the program will eventually take the board in from somewhere else
-#   (or it'll make its own), but this is just temporary,
-#   to make it easier for me to handle
+#? also temp
+#    the program will eventually take the board in from somewhere else
+#    (or it'll make its own), but this is just temporary,
+#    to make it easier for me to handle
 board_input: board_matrix_raw = BOARD_OPTIONS["easy"]

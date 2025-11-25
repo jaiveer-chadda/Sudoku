@@ -12,17 +12,16 @@ from source.common.functions.calculations import get_index_from_coords, get_pare
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
-# eq=False just fixes some functionality when Cells are used in sets
 @dataclass(eq=False)
+# eq=False just fixes some functionality when Cells are used in sets
 class Cell:
-    # Mandatory properties
+    #I Mandatory properties
     index: int
     _parent: Board_
     
-    # Optional properties
-    #   (which honestly, except for value,
-    #   will probably never be given on init -
-    #   they're just being initialised themselves over here)
+    #I Optional properties
+    #    (which honestly, except for value, will probably never be given on init -
+    #    they're just being initialised themselves over here)
     value: Optional[int] = None
     possible_options: set[int] = field(default_factory=lambda: ALL_OPTIONS_SET.copy())
     
@@ -32,23 +31,32 @@ class Cell:
     
     #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __post_init__(self) -> None:
+        # add the cell being created to the column, row, and box tracker of its parent
+        #   this just makes it a lit easier to figure out which cells see which other cells
         self._parent.columns[self.x].add(self)
         self._parent.rows[self.y].add(self)
         self._parent.boxes[self.parent_box].add(self)
         
         # the board is stored such that the value of each cell is 0 if it's undefined -
-        #   this just fixes that for easier logic
+        #   this just fixes that, for easier logic
         if self.value == 0:
             self.value = None
         
+        # if the cell's value is given at initialisation,
+        #   then there's only one option that can ever go in possible_options
         if self.value is not None:
             self.possible_options = {self.value}
     
     #—— General Methods ——————————————————————————————————————————————————————————————————————
-    #———— remove_from_options ———————————————————
+    #———— remove_from_options() ———————————————————
     def remove_from_options(self, to_remove: int) -> None:
+        # remove the given digit from this cell's possibility set
+        #   [this will raise a KeyError if the value being removed isn't in the set]
+        #     but that functionality is intended, as it's useful to see if something was actually removed,
+        #     and the error is handled in {{Board._pre_backtracking_solve}}
         self.possible_options.remove(to_remove)
-        # if there's only one possible value the cell can be,
+        
+        # if there's only one possible value left that the cell can be,
         #   then set the cell to that value
         if len(self.possible_options) == 1:
             self.value = list(self.possible_options)[0]
@@ -70,7 +78,7 @@ class Cell:
         return self.x, self.y
     
     @coords.setter
-    def coords(self, xy: coordinates):
+    def coords(self, xy: coordinates) -> None:
         self.index = get_index_from_coords(*xy)
     
     #———— parent_box ————————————————————————————
@@ -81,6 +89,7 @@ class Cell:
     #———— sees ——————————————————————————————————
     @property
     def sees(self) -> set[Cell]:
+        # Get the union of the 3 sets containing the values that this cell can see
         return self._parent.columns[self.x] | self._parent.rows[self.y] | self._parent.boxes[self.parent_box]
     
     #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
@@ -89,4 +98,5 @@ class Cell:
     
     def __repr__(self) -> str:
         return str(self.possible_options) if self.possible_options is not None else f".{self.value}."
-    #—————————————————————————————————————————————————————————————————————————————————————————
+
+#———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
