@@ -63,7 +63,7 @@ def _get_board_with_borders(input_board: board_flat) -> str:
             "down": ('└', '┴', '┘'),
         }.setdefault(line_type, ('┼', '┼', '┼'))  # just some default values, in case something fails
         
-        # _mid.join(_line_seg_3) joins 3 line segments ('───────') by separating them with the middle box char (eg.'┬'),
+        #_mid.join(_line_seg_3) joins 3 line segments ('───────') by separating them with the middle box char (eg.'┬'),
         #   creating '───────┬───────┬───────',
         # which is then concatenated with:
         #   a newline and the left box drawing character (eg.'┌') on one side,

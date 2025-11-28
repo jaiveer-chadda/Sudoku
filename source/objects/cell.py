@@ -15,11 +15,11 @@ from source.common.functions.calculations import get_index_from_coords, get_pare
 @dataclass(eq=False)
 # eq=False just fixes some functionality when Cells are used in sets
 class Cell:
-    #I Mandatory properties
+    #I)Mandatory properties
     index: int
     _parent: Board_
     
-    #I Optional properties
+    #I)Optional properties
     #    (which honestly, except for value, will probably never be given on init -
     #    they're just being initialised themselves over here)
     value: Optional[int] = None
