@@ -12,8 +12,8 @@ T: TypeVar = TypeVar('T')
 type colour = int
 type coordinates = tuple[int, int]
 
-type Cell_ = 'Cell'
-type Board_ = 'Board'
+type Cell_ = object
+type Board_ = object
 
 type cell_insert_type = Literal["value", "corner", "centre", "colour"]
 

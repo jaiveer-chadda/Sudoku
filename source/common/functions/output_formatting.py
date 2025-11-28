@@ -14,7 +14,7 @@ def format_set(input_set: set[int]) -> str:
     return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=BOARD_SIZE else ""}" for i in ALL_OPTIONS])+"} "
 
 
-def get_board(input_board: board_flat, *, draw_box_borders: bool=False) -> str:
+def get_formatted_board(input_board: board_flat, *, draw_box_borders: bool=False) -> str:
     # A handler function that calls one of the two functions below
     #   it was just cleaner to do it this way
     if draw_box_borders:
@@ -27,7 +27,7 @@ def _get_board_no_borders(input_board: board_flat) -> str:
     return "".join(
         [
             f"{                                                     # return the value of the cell,
-                val if (val := cell.value)!=0 else " "              #   unless its 0, in which case return a space
+                " " if (val := cell.value) in (0, None) else val    #   unless its 0 or None, then return a space
             }{
                 "\n" if i % BOARD_SIZE == BOARD_SIZE-1 else " "     # every (by default) 8 chars, return a newline
             }"
@@ -92,7 +92,7 @@ def _get_board_with_borders(input_board: board_flat) -> str:
     ).format(  # now, since we have a string with {}s in it, we can use .format() to assign values to those {}s
         *[       # make sure to unpack the result of the list comprehension,
             f"{    # so that all the values can be individually assigned
-                val if (val := cell.value)!=0 else " "  # don't display a cell if its value is 0
+                " " if (val := cell.value) in (0, None) else val  # don't display a cell if its value is 0 or None
             }" for i, cell in enumerate(input_board)
         ]
     ))  # => """

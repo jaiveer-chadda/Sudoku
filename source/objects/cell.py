@@ -29,6 +29,8 @@ class Cell:
     central_candidates: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
     
+    is_given_value: bool = False
+    
     #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __post_init__(self) -> None:
         # add the cell being created to the column, row, and box tracker of its parent
@@ -53,7 +55,7 @@ class Cell:
         # remove the given digit from this cell's possibility set
         #   [this will raise a KeyError if the value being removed isn't in the set]
         #     but that functionality is intended, as it's useful to see if something was actually removed,
-        #     and the error is handled in {{Board._pre_backtracking_solve}}
+        #     and the error is handled in {{Key Error Excepted}}
         self.possible_options.remove(to_remove)
         
         # if there's only one possible value left that the cell can be,
@@ -62,6 +64,11 @@ class Cell:
             self.value = list(self.possible_options)[0]
     
     #—— Property Methods —————————————————————————————————————————————————————————————————————
+    #———— x —————————————————————————————————————
+    @property
+    def has_no_value(self) -> int:
+        return self.value is None
+    
     #———— x —————————————————————————————————————
     @property
     def x(self) -> int:

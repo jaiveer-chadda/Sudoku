@@ -21,6 +21,8 @@ BOX_SIZE: int = _int_sqrt(BOARD_SIZE)  # the sub-box dimensions (=3 for a standa
 ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))  # a tuple containing the numbers 1 -> 9
 ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))  # a  set  containing the numbers 1 -> 9
 
+COLOUR_OPTIONS: tuple[str, ...] = ("black", "red", "green", "yellow", "blue", "magenta", "cyan", "white")
+
 #?temp
 #    it's just here while I create the solver
 BOARD_OPTIONS: dict[str, board_matrix_raw] = {

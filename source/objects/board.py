@@ -1,5 +1,5 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
-from typing import Optional, Iterable, overload
+from typing import Optional, Iterable, overload, Literal
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
@@ -12,7 +12,7 @@ from source.objects.cell import Cell
 #————— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords
 from source.common.functions.data_manipulation import flatten_matrix_to_1d_tuple
-from source.common.functions.output_formatting import format_set, get_board
+from source.common.functions.output_formatting import format_set, get_formatted_board
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
@@ -25,41 +25,49 @@ class Board:
         
         self.board: Optional[board_flat] = None  # just initialising the property
         
-        _flat_board: board_flat_raw  = flatten_matrix_to_1d_tuple(board)
+        _flat_board: board_flat_raw = flatten_matrix_to_1d_tuple(board)
         self.board: board_flat = self._create_board_from_ints(_flat_board)
+        
         if do_auto_solve:
-            self._pre_backtracking_solve()
+            self._changed_board_state: bool = True
+            self.solve_board()
     
     #—— Private Methods ——————————————————————————————————————————————————————————————————————
     #———— _create_board_from_ints() ———————————————
     def _create_board_from_ints(self, int_list: Iterable[int]) -> board_flat:
-        return [Cell(index=i, _parent=self, value=val) for i, val in enumerate(int_list)]
-
-    #———— _pre_backtracking_solve() ———————————————
-    def _pre_backtracking_solve(self) -> None:
-        #{{Board._pre_backtracking_solve}}
-        something_changed: bool = True
+        return [Cell(index=i, _parent=self, value=val, is_given_value=True) for i, val in enumerate(int_list)]
+    
+    #———— _remove_invalid_candidates() ————————————
+    def _remove_invalid_candidates(self, cell_to_check: Cell) -> Literal[0, 1]:
+        # ignore the cells that don't have a value
+        if cell_to_check.has_no_value:
+            return 1
+        # for all cells with a value, check which cells it can see,
+        #   and remove its value from those seen cells
+        for cell_to_change in cell_to_check.sees:
+            try:
+                cell_to_change.remove_from_options(cell_to_check.value)
+                self._changed_board_state = True
+            # if a {{KeyError}} is raised
+            #   it means that that value wasn't an option in the cell we tried to remove it from
+            #   which doesn't matter, so it's ignored
+            # it's also easier and quicker to handle it this way,
+            #   rather than checking whether the value actually _is_ an option before removing it
+            except KeyError:
+                #{{Key Error Excepted}}
+                pass
+        return 0
+    
+    #———— solve_board() ———————————————————————————
+    def solve_board(self) -> None:
+        print(get_formatted_board(self.board, draw_box_borders=True))
         # repeat until you can make no further progress
-        while something_changed:
-            something_changed = False
+        while self._changed_board_state:
+            self._changed_board_state = False
+            
             # iterate through every cell in the board
             for cell_to_check in self.board:
-                # ignore the cells that don't have a value
-                if cell_to_check.value is None:
-                    continue
-                # for all cells with a value, check which cells it can see,
-                #   and remove its value from those seen cells
-                for cell_to_change in cell_to_check.sees:
-                    try:
-                        cell_to_change.remove_from_options(cell_to_check.value)
-                        something_changed = True
-                    # if a {{KeyError}} is raised
-                    #   it means that that value wasn't an option in the cell we tried to remove it from
-                    #   which doesn't matter, so it's ignored
-                    # it's also easier and quicker to handle it this way,
-                    #   rather than checking whether the value _is_ an option before removing it
-                    except KeyError:
-                        pass
+                self._remove_invalid_candidates(cell_to_check)
                     
     #—— General Methods ——————————————————————————————————————————————————————————————————————
     #———— fill_cell() —————————————————————————————
@@ -104,9 +112,9 @@ class Board:
     
     #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
     def __str__(self) -> str:
-        return get_board(self.board, draw_box_borders=True)
+        return get_formatted_board(self.board, draw_box_borders=True)
 
     def __repr__(self) -> str:
-        return get_board(self.board, draw_box_borders=False)
+        return get_formatted_board(self.board, draw_box_borders=False)
 
 #———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
