@@ -47,15 +47,21 @@ def colour_text(
     if font_colour is None and background_colour is None:
         raise ValueError("You must specify either a font colour or a background colour")
     
-    match type(font_colour):
-        case str:
-            pass
-        case int:
-            pass
-        case tuple:
-            pass
-        case _:
-            pass
+    #TODO:
+    # - figure out why the cases are unreachable
+    # - figure out the actual implementation
+    # - figure out if this is the best way to do it
+    #   - may have to just use if/else statements
+
+    # match type(font_colour):
+    #     case str:
+    #         pass
+    #     case int:
+    #         pass
+    #     case tuple:
+    #         pass
+    #     case _:
+    #         pass
     
     return f"\x1b[0;31m{text}"
 
