@@ -1,11 +1,63 @@
 #—— External Imports ——————————————————————————————————————————————————————————————————————————
-from typing import Literal
+from typing import Literal, Optional
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS
 from source.common.types_ import board_flat
 #—————————————————————————————————————————————————————————————————————————————————————————————
+
+_COLOUR_MAPPING: dict[str, int] = {
+    "black":    0,
+    "red":      1,
+    "green":    2,
+    "yellow":   3,
+    "blue":     4,
+    "magenta":  5,
+    "cyan":     6,
+    "white":    7
+}
+
+
+def colour_text(
+        text: str,
+        font_colour: Optional[Literal[
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white"
+        ] | tuple[int, int, int] | int] = None,
+        font_is_bright: bool = False,
+        background_colour: Optional[Literal[
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white"
+        ] | tuple[int, int, int] | int] = None,
+        background_is_bright: bool = False
+) -> str:
+    if font_colour is None and background_colour is None:
+        raise ValueError("You must specify either a font colour or a background colour")
+    
+    match type(font_colour):
+        case str:
+            pass
+        case int:
+            pass
+        case tuple:
+            pass
+        case _:
+            pass
+    
+    return f"\x1b[0;31m{text}"
 
 
 def format_set(input_set: set[int]) -> str:
