@@ -7,6 +7,8 @@ from source.common.constants import BOARD_SIZE, ALL_OPTIONS
 from source.common.types_ import board_flat
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
+_ESCAPE_CHAR: str = '\x1b'
+
 _COLOUR_MAPPING: dict[str, int] = {
     "black":    0,
     "red":      1,
@@ -19,9 +21,77 @@ _COLOUR_MAPPING: dict[str, int] = {
 }
 
 
+# def colour_text(
+#         text: str,
+#         font_colour: Optional[Literal[
+#             "black",
+#             "red",
+#             "green",
+#             "yellow",
+#             "blue",
+#             "magenta",
+#             "cyan",
+#             "white"
+#         ] | tuple[int, int, int] | int] = None,
+#         font_is_bright: bool = False,
+#         background_colour: Optional[Literal[
+#             "black",
+#             "red",
+#             "green",
+#             "yellow",
+#             "blue",
+#             "magenta",
+#             "cyan",
+#             "white"
+#         ] | tuple[int, int, int] | int] = None,
+#         background_is_bright: bool = False
+# ) -> str:
+#     if (font_colour is None) and (background_colour is None):
+#         raise ValueError("You must specify either a font colour or a background colour")
+#
+#     #TODO:
+#     # - figure out why the cases are unreachable
+#     # - figure out the actual implementation
+#     # - figure out if this is the best way to do it
+#     #   - may have to just use if/else statements
+#
+#     _font_col_type: Optional[str] = None
+#     match font_colour:
+#         case str():
+#             font_colour = _COLOUR_MAPPING[font_colour]
+#             _font_col_type = "8_16"
+#         case int() if 0 <= font_colour <= 7:
+#             _font_col_type = "8_16"
+#         case int() if font_colour > 7:
+#             _font_col_type = "256"
+#         case tuple():
+#             _font_col_type = "rgb"
+#         case _:
+#             raise ValueError("Invalid font colour type.")
+#
+#     _bg_col_type: Optional[str] = None
+#     match background_colour:
+#         case str():
+#             background_colour = _COLOUR_MAPPING[background_colour]
+#             _bg_col_type = "8_16"
+#         case int() if 0 <= font_colour <= 7:
+#             _bg_col_type = "8_16"
+#         case int() if font_colour > 7:
+#             _font_col_type = "256"
+#         case tuple():
+#             _bg_col_type = "rgb"
+#         case _:
+#             raise ValueError("Invalid background colour type.")
+#
+#     if _font_col_type in ("8_16", None) and _bg_col_type in ("8_16", None):
+#         return f"{_ESCAPE_CHAR}[0;31m{text}\x1b[0;37;41mWorld"
+#
+#     return f"{_ESCAPE_CHAR}[0;31m{text}"
+
+
 def colour_text(
         text: str,
-        font_colour: Optional[Literal[
+        font_colour: Literal[
             "black",
             "red",
             "green",
@@ -30,40 +100,8 @@ def colour_text(
             "magenta",
             "cyan",
             "white"
-        ] | tuple[int, int, int] | int] = None,
-        font_is_bright: bool = False,
-        background_colour: Optional[Literal[
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white"
-        ] | tuple[int, int, int] | int] = None,
-        background_is_bright: bool = False
-) -> str:
-    if font_colour is None and background_colour is None:
-        raise ValueError("You must specify either a font colour or a background colour")
-    
-    #TODO:
-    # - figure out why the cases are unreachable
-    # - figure out the actual implementation
-    # - figure out if this is the best way to do it
-    #   - may have to just use if/else statements
-
-    # match type(font_colour):
-    #     case str:
-    #         pass
-    #     case int:
-    #         pass
-    #     case tuple:
-    #         pass
-    #     case _:
-    #         pass
-    
-    return f"\x1b[0;31m{text}"
+        ]) -> str:
+    return f"{_ESCAPE_CHAR}[0;3{_COLOUR_MAPPING[font_colour]}m{text}"
 
 
 def format_set(input_set: set[int]) -> str:
