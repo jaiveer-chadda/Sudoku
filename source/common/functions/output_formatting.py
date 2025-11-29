@@ -8,6 +8,7 @@ from source.common.types_ import board_flat
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 _ESCAPE_CHAR: str = '\x1b'
+_RESET: str = f"{_ESCAPE_CHAR}[0m"
 
 _COLOUR_MAPPING: dict[str, int] = {
     "black":    0,
@@ -101,7 +102,7 @@ def colour_text(
             "cyan",
             "white"
         ]) -> str:
-    return f"{_ESCAPE_CHAR}[0;3{_COLOUR_MAPPING[font_colour]}m{text}"
+    return f"{_ESCAPE_CHAR}[0;3{_COLOUR_MAPPING[font_colour]}m{text}{_RESET}"
 
 
 def format_set(input_set: set[int]) -> str:
@@ -188,7 +189,9 @@ def _get_board_with_borders(input_board: board_flat) -> str:
     ).format(  # now, since we have a string with {}s in it, we can use .format() to assign values to those {}s
         *[       # make sure to unpack the result of the list comprehension,
             f"{    # so that all the values can be individually assigned
-                " " if (val := cell.value) in (0, None) else val  # don't display a cell if its value is 0 or None
+                " " if (val := cell.value) in (0, None) else (  # don't display a cell if its value is 0 or None
+                    val if cell.is_given_value else colour_text(val, "blue")
+                )  # if a cell was determined by the program, then highlight it as blue
             }" for i, cell in enumerate(input_board)
         ]
     ))  # => """

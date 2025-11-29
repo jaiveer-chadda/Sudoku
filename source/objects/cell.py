@@ -29,7 +29,7 @@ class Cell:
     central_candidates: list[int] = field(default_factory=list)
     colours: list[colour] = field(default_factory=list)
     
-    is_given_value: bool = False
+    is_given_value: Optional[bool] = None
     
     #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __post_init__(self) -> None:
@@ -48,6 +48,8 @@ class Cell:
         #   then there's only one option that can ever go in possible_options
         if self.value is not None:
             self.possible_options = {self.value}
+            
+        self.is_given_value = self.value is not None
     
     #—— General Methods ——————————————————————————————————————————————————————————————————————
     #———— remove_from_options() ———————————————————
