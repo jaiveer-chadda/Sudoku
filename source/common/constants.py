@@ -71,9 +71,33 @@ BOARD_OPTIONS: dict[str, board_matrix_raw] = {
             [0, 0, 0, 8, 0, 0, 2, 0, 0],
             [0, 9, 4, 0, 0, 0, 0, 0, 0]
         ],
+    "empty":
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+    "anti-backtracking":
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 3, 0, 8, 5],
+            [0, 0, 1, 0, 2, 0, 0, 0, 0],
+            [0, 0, 0, 5, 0, 7, 0, 0, 0],
+            [0, 0, 4, 0, 0, 0, 1, 0, 0],
+            [0, 9, 0, 0, 0, 0, 0, 0, 0],
+            [5, 0, 0, 0, 0, 0, 0, 7, 3],
+            [0, 0, 2, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 4, 0, 0, 0, 9]
+        ],
 }
 
 #?also temp
 #    the programme will eventually take the board as an input from somewhere else (or it'll make its own),
 #    so this is just temporary - it makes it easier for me personally to handle
-board_input: board_matrix_raw = BOARD_OPTIONS["easy"]
+board_input: board_matrix_raw = BOARD_OPTIONS["anti-backtracking"]
