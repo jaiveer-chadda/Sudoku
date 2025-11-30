@@ -2,7 +2,7 @@
 #————— Consts & Types ———————————————————————————
 from source.common.constants import board_input
 #————— Objects ——————————————————————————————————
-from source.objects.board import Board
+from source.objects.board.board import Board
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 

@@ -9,8 +9,10 @@ from source.common.types_ import board_matrix_raw, board_flat_raw, colour, coord
 #————— Objects ——————————————————————————————————
 from source.objects.cell import Cell, validate_input_type, board_flat
 
+#————— Solver ———————————————————————————————————
+from source.objects.board.solver.main import get_solved_board
+
 #————— Functions ————————————————————————————————
-from source.common.functions.solver import get_solved_board
 from source.common.functions.calculations import get_index_from_coords
 from source.common.functions.data_manipulation import flatten_matrix_to_1d_tuple
 from source.common.functions.output_formatting import format_set, get_formatted_board
