@@ -9,6 +9,7 @@ from source.common.constants import BOARD_SIZE, ALL_OPTIONS
 from source.objects.cell import board_flat
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
+
 _ESCAPE_CHAR: str = '\x1b'
 _RESET: str = f"{_ESCAPE_CHAR}[0m"
 
@@ -93,7 +94,7 @@ _COLOUR_MAPPING: dict[str, int] = {
 
 
 def colour_text(
-        text: str,
+        text: str | int,
         font_colour: Literal[
             "black",
             "red",
@@ -139,68 +140,73 @@ def _get_board_no_borders(input_board: board_flat) -> str:
     )
 
 
-def _get_board_with_borders(input_board: board_flat) -> str:
+def _separator_line(line_type: Literal["up", "mid", "down"]) -> str:
+    _left, _mid, _right = {  # look up the inputted line_type, and get their relevant box drawing chars
+        "up":   ('┌', '┬', '┐'),
+        "mid":  ('├', '┼', '┤'),
+        "down": ('└', '┴', '┘'),
+    }.setdefault(line_type, ('┼', '┼', '┼'))  # just some default values, in case something fails
     
-    # a new line and 8 spaces wirth of indent
-    _newline:              str  = "\n"+" "*8                          # => '\n        '
-    # the lines between the boxes
-    _line_segment:         str  = "─"*7                               # => '───────'
-    
-    # one of the segments where the .format function will eventually put the values
-    _content_segment:      str  = "│ "+"{} "*3                        # => '│ {} {} {} '
-    # a newline, 3 of the content segments, and a box char, all concatenated together
-    _content_line:         str  = f"{_newline}{_content_segment*3}│"  # => '│ {} {} {} │ {} {} {} │ {} {} {} │'
-    
-    # a tuple of three line segments - will be used to collate the final table
-    _line_seg_3:     tuple[str, ...] = tuple([_line_segment]*3)       # => ['───────', '───────', '───────']
-    
-    # a tuple of 3 content lines, which themselves have been multiplied by 3
-    _cont_3_lines_3: tuple[str, ...] = tuple([_content_line*3]*3)     # => ['│ {} {} {} │ {} {} {} │ {} {} {} │',
-    #                                                                       '│ {} {} {} │ {} {} {} │ {} {} {} │',
-    #                                                                       '│ {} {} {} │ {} {} {} │ {} {} {} │']
-    
-    def _separator_line(line_type: Literal["up", "mid", "down"]) -> str:
-        _left, _mid, _right = {  # look up the inputted line_type, and get their relevant box drawing chars
-            "up":   ('┌', '┬', '┐'),
-            "mid":  ('├', '┼', '┤'),
-            "down": ('└', '┴', '┘'),
-        }.setdefault(line_type, ('┼', '┼', '┼'))  # just some default values, in case something fails
-        
-        #_mid.join(_line_seg_3) joins 3 line segments ('───────') by separating them with the middle box char (eg.'┬'),
-        #   creating '───────┬───────┬───────',
-        # which is then concatenated with:
-        #   a newline and the left box drawing character (eg.'┌') on one side,
-        #   and the right box char ('┐') on the other
-        return f"{_newline}{_left}{_mid.join(_line_seg_3)}{_right}"  # => '┌───────┬───────┬───────┐' (line_type="up")
-    
-    return ((                                               # finally, concatenate the three separator lines together
-        _separator_line("up") +                             # for the content sections, do the same thing as the sep
-        _separator_line("mid").join(_cont_3_lines_3) +      #   lines, instead joining 3 middle sections
+    # _mid.join(_line_seg_3) joins 3 line segments ('───────') by separating them with the middle box char (eg.'┬'),
+    #   creating '───────┬───────┬───────',
+    # which is then concatenated with:
+    #   a newline and the left box drawing character (eg.'┌') on one side,
+    #   and the right box char ('┐') on the other
+    return f"{_NEWLINE}{_left}{_mid.join(_LINE_SEG_3)}{_right}"  # => '┌───────┬───────┬───────┐' (line_type="up")
+
+
+#—— Precompute board template —————————————————————————————————
+# a new line and 8 spaces wirth of indent
+_NEWLINE:              str  = "\n" + " " * 8                          # => '\n        '
+# the lines between the boxes
+_LINE_SEGMENT:         str  = "─" * 7                                 # => '───────'
+
+# one of the segments where the .format function will eventually put the values
+_CONTENT_SEGMENT:      str  = "│ " + "{} " * 3                        # => '│ {} {} {} '
+# a newline, 3 of the content segments, and a box char, all concatenated together
+_CONTENT_LINE:         str  = f"{_NEWLINE}{_CONTENT_SEGMENT * 3}│"    # => '│ {} {} {} │ {} {} {} │ {} {} {} │'
+
+# a tuple of three line segments - will be used to collate the final table
+_LINE_SEG_3:     tuple[str, ...] = tuple([_LINE_SEGMENT] * 3)         # => ['───────', '───────', '───────']
+
+# a tuple of 3 content lines, which themselves have been multiplied by 3
+_CONT_3_LINES_3: tuple[str, ...] = tuple([_CONTENT_LINE * 3] * 3)     # => ['│ {} {} {} │ {} {} {} │ {} {} {} │',
+#                                                                       '│ {} {} {} │ {} {} {} │ {} {} {} │',
+#                                                                       '│ {} {} {} │ {} {} {} │ {} {} {} │']
+
+_BOARD_TEMPLATE: str = (                                # finally, concatenate the three separator lines together
+        _separator_line("up") +                         # for the content sections, do the same thing as the sep
+        _separator_line("mid").join(_CONT_3_LINES_3) +  #   lines, instead joining 3 middle sections
         _separator_line("down") +
-        "\n"  #  => """
-        #         ┌───────┬───────┬───────┐
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         ├───────┼───────┼───────┤
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         ├───────┼───────┼───────┤
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         │ {} {} {} │ {} {} {} │ {} {} {} │
-        #         └───────┴───────┴───────┘
-        # """
-    ).format(  # now, since we have a string with {}s in it, we can use .format() to assign values to those {}s
-        *[       # make sure to unpack the result of the list comprehension,
-            f"{    # so that all the values can be individually assigned
+        "\n"
+)  #  => """
+#         ┌───────┬───────┬───────┐
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         ├───────┼───────┼───────┤
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         ├───────┼───────┼───────┤
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         │ {} {} {} │ {} {} {} │ {} {} {} │
+#         └───────┴───────┴───────┘
+# """
+
+
+def _get_board_with_borders(input_board: board_flat) -> str:
+    # now, since we have a string with {}s in it, we can use .format() to assign values to those {}s
+    return _BOARD_TEMPLATE.format(
+        *[         # make sure to unpack the result of the list comprehension,
+            f"{    #    so that all the values can be individually assigned
                 " " if (val := cell.value) in (0, None) else (  # don't display a cell if its value is 0 or None
                     val if cell.is_given_value else colour_text(val, "blue")
                 )  # if a cell was determined by the program, then highlight it as blue
             }" for i, cell in enumerate(input_board)
         ]
-    ))  # => """
+    )  # => """
     #         ┌───────┬───────┬───────┐
     #         │ 9 6 2 │ 3 7 8 │ 1 5 4 │
     #         │ 7 5 1 │ 9 4 6 │ 8 3 2 │
