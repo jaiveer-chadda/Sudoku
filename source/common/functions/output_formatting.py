@@ -1,10 +1,12 @@
 #—— External Imports ——————————————————————————————————————————————————————————————————————————
-from typing import Literal, Optional
+from typing import Literal  #_, Optional
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS
-from source.common.types_ import board_flat
+
+#————— Objects ——————————————————————————————————
+from source.objects.cell import board_flat
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 _ESCAPE_CHAR: str = '\x1b'

@@ -5,11 +5,15 @@ from typing import Optional
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS_SET
-from source.common.types_ import colour, coordinates, Board_
+from source.common.types_ import colour, coordinates, Board
 
 #————— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
 #—————————————————————————————————————————————————————————————————————————————————————————————
+
+
+type board_flat = list[Cell]
+type board_matrix = list[list[Cell]]
 
 
 @dataclass(eq=False)
@@ -17,7 +21,7 @@ from source.common.functions.calculations import get_index_from_coords, get_pare
 class Cell:
     #I)Mandatory properties
     index: int
-    _parent: Board_
+    _parent: Board
     
     #I)Optional properties
     #    (which honestly, except for value, will probably never be given on init -
