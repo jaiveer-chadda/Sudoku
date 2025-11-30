@@ -7,7 +7,7 @@ from source.common.constants import BOARD_SIZE
 from source.common.types_ import board_matrix_raw, board_flat_raw, colour, coordinates, cell_insert_type
 
 #————— Objects ——————————————————————————————————
-from source.objects.cell import Cell, board_flat
+from source.objects.cell import Cell, validate_input_type, board_flat
 
 #————— Functions ————————————————————————————————
 from source.common.functions.solver import get_solved_board
@@ -15,6 +15,14 @@ from source.common.functions.calculations import get_index_from_coords
 from source.common.functions.data_manipulation import flatten_matrix_to_1d_tuple
 from source.common.functions.output_formatting import format_set, get_formatted_board
 #—————————————————————————————————————————————————————————————————————————————————————————————
+
+
+def _validate_unique_input(index: int, coords: coordinates) -> None:
+    if not ((index is None) ^ (coords is None)):
+        raise ValueError(
+            "'fill_cell' takes an input of at least one of 'index: int', "
+            "or 'coords: tuple[int, int]', but not both."
+        )
 
 
 class Board:
@@ -33,56 +41,41 @@ class Board:
             # self._changed_board_state: bool = True
             self.solve_board()
     
-    #—— Private Methods ——————————————————————————————————————————————————————————————————————
-    #———— _create_board_from_ints() ———————————————
-    def _create_board_from_ints(self, int_list: Iterable[int]) -> board_flat:
-        return [Cell(index=i, _parent=self, value=val, is_given_value=True) for i, val in enumerate(int_list)]
-    
+    #—— General Methods ——————————————————————————————————————————————————————————————————————
     #———— solve_board() ———————————————————————————
     def solve_board(self) -> None:
         print(get_formatted_board(self.board, draw_box_borders=True))
         self.board = get_solved_board(self.board)
-                    
-    #—— General Methods ——————————————————————————————————————————————————————————————————————
+        
+    #———— _create_board_from_ints() ———————————————
+    def _create_board_from_ints(self, int_list: Iterable[int]) -> board_flat:
+        return [Cell(index=i, _parent=self, value=val, is_given_value=True) for i, val in enumerate(int_list)]
+    
+    #———— _debug_print_candidates() ————————————————
+    def _debug_print_candidates(self) -> None:
+        for i, cell in enumerate(self.board):
+            print(f"{format_set(cell.possible_options)}", end=("\n" if i % BOARD_SIZE == BOARD_SIZE-1 else ""))
+    
     #———— fill_cell() —————————————————————————————
     @overload
-    def fill_cell(self, input_: int, type_: cell_insert_type, index: int) -> None:
+    def fill_cell(self, number_to_add: int | colour, type_: cell_insert_type, index: int) -> None:
         pass
 
     @overload
-    def fill_cell(self, input_: int, type_: cell_insert_type, coords: coordinates) -> None:
+    def fill_cell(self, number_to_add: int | colour, type_: cell_insert_type, coords: coordinates) -> None:
         pass
     
     def fill_cell(self,
-                  input_: int | colour,
+                  number_to_add: int | colour,
                   type_: cell_insert_type,
                   index: Optional[int]=None,
-                  coords: Optional[coordinates]=None) -> None:
-        if not ((index is None) ^ (coords is None)):
-            raise ValueError(
-                "'fill_cell' takes an input of at least one of 'index: int', "
-                "or 'coords: tuple[int, int]', but not both."
-            )
+                  coords: Optional[coordinates]=None
+                  ) -> None:
+        _validate_unique_input(index, coords)
+        validate_input_type(number_to_add, type_)
         
-        index: int = get_index_from_coords(*coords) if coords is not None else index
-        
-        if (input_ is colour) and type_ in ("value", "corner", "centre"):
-            raise TypeError("'input_' must be of type 'int'")
-        elif input_ is not colour and type_ == "colour":
-            raise TypeError("'input_' must be of type 'colour'")
-        
-        match type_:
-            case "value":  self.board[index].value = input_
-            case "corner": self.board[index].corner_candidates.append(input_)
-            case "centre": self.board[index].central_candidates.append(input_)
-            case "colour": self.board[index].colours.append(input_)
-            case _:
-                raise ValueError("Invalid cell type")
-    
-    #———— print_candidates() ——————————————————————
-    def print_candidates(self) -> None:
-        for i, cell in enumerate(self.board):
-            print(f"{format_set(cell.possible_options)}", end=("\n" if i % BOARD_SIZE == BOARD_SIZE-1 else ""))
+        index: int = get_index_from_coords(*coords) if (coords is not None) else index
+        self.board[index].fill_or_add_number(number_to_add, type_)
     
     #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
     def __str__(self) -> str:

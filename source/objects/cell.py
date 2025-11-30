@@ -5,7 +5,7 @@ from typing import Optional
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS_SET
-from source.common.types_ import colour, coordinates, Board
+from source.common.types_ import colour, coordinates, Board, cell_insert_type
 
 #————— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
@@ -14,6 +14,13 @@ from source.common.functions.calculations import get_index_from_coords, get_pare
 
 type board_flat = list[Cell]
 type board_matrix = list[list[Cell]]
+
+
+def validate_input_type(number_to_check: int, type_: cell_insert_type) -> None:
+    if (number_to_check is colour) and (type_ in ("value", "corner", "centre")):
+        raise TypeError("'number_to_add' must be of type 'int'")
+    elif (number_to_check is not colour) and (type_ == "colour"):
+        raise TypeError("'number_to_add' must be of type 'colour'")
 
 
 @dataclass(eq=False)
@@ -68,6 +75,24 @@ class Cell:
         #   then set the cell to that value
         if len(self.possible_options) == 1:
             self.value = list(self.possible_options)[0]
+    
+    def fill_or_add_number(self, number_to_add: int, input_type: cell_insert_type) -> None:
+        match input_type:
+            case "value":  self.value = number_to_add
+            case "corner": self.corner_candidates.append(number_to_add)
+            case "centre": self.central_candidates.append(number_to_add)
+            case "colour": self.colours.append(number_to_add)
+            case _:
+                raise ValueError("Invalid cell type")
+    
+    def remove_or_delete_number(self, number_to_remove: int, input_type: cell_insert_type) -> None:
+        match input_type:
+            case "value":  self.value = None
+            case "corner": self.corner_candidates.remove(number_to_remove)
+            case "centre": self.central_candidates.remove(number_to_remove)
+            case "colour": self.colours.remove(number_to_remove)
+            case _:
+                raise ValueError("Invalid cell type")
     
     #—— Property Methods —————————————————————————————————————————————————————————————————————
     #———— x —————————————————————————————————————
