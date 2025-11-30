@@ -1,5 +1,6 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
 from dataclasses import dataclass, field
+from copy import deepcopy
 from typing import Optional
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
@@ -93,6 +94,15 @@ class Cell:
             case "colour": self.colours.remove(number_to_remove)
             case _:
                 raise ValueError("Invalid cell type")
+        
+    def copy(self) -> Cell:
+        new: Cell = object.__new__(Cell)
+        
+        state: dict[str, Any] = self.__dict__.copy()
+        state["_parent"] = self._parent
+        
+        new.__dict__ = state
+        return new
     
     #—— Property Methods —————————————————————————————————————————————————————————————————————
     #———— x —————————————————————————————————————
