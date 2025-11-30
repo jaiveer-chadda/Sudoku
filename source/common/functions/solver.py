@@ -13,12 +13,8 @@ from source.common.functions.output_formatting import print_pretty_board
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
-# def _get_unsolved_cells(board: board_flat) -> dict[int, set[int]]:
-#     return {cell.index: cell.possible_options for cell in board if cell.has_some_value}
-
-
 def get_solved_board(board: board_flat) -> board_flat:
-    for solving_function in [_backtracking_solve]:  # (_basic_solve, _backtracking_solve):
+    for solving_function in (_basic_solve, _backtracking_solve):
         print_pretty_board(board)
         board = solving_function(board)
     return board
@@ -59,21 +55,34 @@ def _remove_invalid_candidates(cell_to_check: Cell, _has_changed: bool) -> Optio
     return _has_changed
 
 
-def _backtracking_solve(board: board_flat) -> board_flat:
+def _backtracking_solve(_board: board_flat) -> board_flat:
+    def _is_valid_assignment(cell: Cell, val: int) -> bool:
+        # cell.sees contains the cell itself (because cell was added to parent sets),
+        #   so skip the same object check
+        return not any(other is not cell and other.value == val for other in cell.sees)
     
-    def _solve_recursive(cell_index: int) -> bool:
-        cell: Cell = board[cell_index]
-        if cell_index >= 81:
+    def solve_recursive(cell_index: int) -> bool:
+        if cell_index >= len(_board):
             return True
-        elif cell.has_some_value:
-            return _solve_recursive(cell_index+1)
-        else:
-            for val_to_try in ALL_OPTIONS:
-                cell.value = val_to_try
-                if _solve_recursive(cell_index+1):
-                    return True
-                cell.value = None
-            return False
         
-    return board
+        cell: Cell = _board[cell_index]
+        
+        if cell.has_some_value:
+            return solve_recursive(cell_index+1)
+            
+        for val_to_try in ALL_OPTIONS:
+            if val_to_try not in cell.possible_options:
+                continue
+            if not _is_valid_assignment(cell, val_to_try):
+                continue
+            
+            cell.value = val_to_try
+            if solve_recursive(cell_index+1):
+                return True
+            cell.value = None
+            
+        return False
+        
+    solve_recursive(0)
+    return _board
 
