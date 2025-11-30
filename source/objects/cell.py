@@ -97,8 +97,8 @@ class Cell:
     #—— Property Methods —————————————————————————————————————————————————————————————————————
     #———— x —————————————————————————————————————
     @property
-    def has_no_value(self) -> int:
-        return self.value is None
+    def has_some_value(self) -> int:
+        return self.value not in (0, None)
     
     #———— x —————————————————————————————————————
     @property

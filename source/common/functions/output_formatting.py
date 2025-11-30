@@ -113,6 +113,10 @@ def format_set(input_set: set[int]) -> str:
     return "{"+"".join([f"{i if i in input_set else " "}{", " if i!=BOARD_SIZE else ""}" for i in ALL_OPTIONS])+"} "
 
 
+def print_pretty_board(board: board_flat) -> None:
+    print(get_formatted_board(board, draw_box_borders=True))
+
+
 def get_formatted_board(input_board: board_flat, *, draw_box_borders: bool=False) -> str:
     # A handler function that calls one of the two functions below
     #   it was just cleaner to do it this way

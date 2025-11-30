@@ -44,7 +44,7 @@ class Board:
     #—— General Methods ——————————————————————————————————————————————————————————————————————
     #———— solve_board() ———————————————————————————
     def solve_board(self) -> None:
-        print(get_formatted_board(self.board, draw_box_borders=True))
+        # print(str(self))
         self.board = get_solved_board(self.board)
         
     #———— _create_board_from_ints() ———————————————
