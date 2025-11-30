@@ -10,9 +10,10 @@ from source.common.functions.output_formatting import print_pretty_board
 
 
 def get_solved_board(board: board_flat) -> board_flat:
-    for solving_function in (_basic_solve, _backtracking_solve):
+    for solving_function in (_basic_solve, _backtracking_solve_one):
         print_pretty_board(board)
         board = solving_function(board)
+    # print(has_unique_solution(board))
     return board
 
 
@@ -55,25 +56,51 @@ def _is_valid_assignment(cell: Cell, val: int) -> bool:
     return True
 
 
-def _backtracking_solve(_board: board_flat) -> board_flat:
+def has_unique_solution(_board: board_flat) -> bool:
+    # Request at most 2 solutions → lets us stop early
+    return _count_solutions(_board, max_count=2) == 1
+
+
+def _count_solutions(_board: board_flat, max_count: int | None = None) -> int:
+    count = 0
+    
+    def count_solution(_) -> bool:
+        nonlocal count
+        count += 1
+        # Stop early if we've reached max_count (2 for uniqueness)
+        return max_count is not None and count >= max_count
+    
+    _backtracking_solve(_board, count_solution)
+    return count
+
+
+def _backtracking_solve_one(_board: board_flat) -> board_flat:
+    def take_first_solution(board: board_flat) -> bool:
+        return True  # stop immediately
+    
+    _backtracking_solve(_board, take_first_solution)
+    return _board
+
+
+def _backtracking_solve(_board: board_flat, on_solution_found) -> bool:
     def solve_recursive(cell_index: int = 0) -> bool:
         if cell_index >= len(_board):
-            return True
+            return on_solution_found(_board)
         
         cell: Cell = _board[cell_index]
         if cell.has_some_value:
-            return solve_recursive(cell_index+1)
+            return solve_recursive(cell_index + 1)
         
         for val_to_try in cell.possible_options:
             if not _is_valid_assignment(cell, val_to_try):
                 continue
-                
-            cell.value = val_to_try
-            if solve_recursive(cell_index+1):
-                return True
-            cell.value = None
             
-        return False
+            cell.value = val_to_try
+            
+            if solve_recursive(cell_index + 1):
+                return True
+            cell.value = None  # backtrack
+            
+        return False  # keep searching
     
-    solve_recursive()
-    return _board
+    return solve_recursive()
