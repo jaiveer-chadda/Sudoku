@@ -1,22 +1,26 @@
-#—— Project Imports ——————————————————————————————————————————————————————————————————————————s
-#————— Objects ——————————————————————————————————
+#—— External Imports —————————————————————————————————————————————————————————————————————————
 from typing import Optional
 
+#—— Project Imports ——————————————————————————————————————————————————————————————————————————s
+#————— Consts & Types ———————————————————————————
+from source.common.constants import ALL_OPTIONS
+
+#————— Objects ——————————————————————————————————
 from source.objects.cell import Cell, board_flat
+
+#————— Functions ————————————————————————————————
 from source.common.functions.output_formatting import print_pretty_board
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
-def _get_unsolved_cells(board: board_flat) -> dict[int, set[int]]:
-    return {cell.index: cell.possible_options for cell in board if cell.has_some_value}
+# def _get_unsolved_cells(board: board_flat) -> dict[int, set[int]]:
+#     return {cell.index: cell.possible_options for cell in board if cell.has_some_value}
 
 
 def get_solved_board(board: board_flat) -> board_flat:
-    
-    for solving_function in (_basic_solve, _backtracking_solve):
+    for solving_function in [_backtracking_solve]:  # (_basic_solve, _backtracking_solve):
         print_pretty_board(board)
         board = solving_function(board)
-    
     return board
 
 
@@ -56,5 +60,20 @@ def _remove_invalid_candidates(cell_to_check: Cell, _has_changed: bool) -> Optio
 
 
 def _backtracking_solve(board: board_flat) -> board_flat:
+    
+    def _solve_recursive(cell_index: int) -> bool:
+        cell: Cell = board[cell_index]
+        if cell_index >= 81:
+            return True
+        elif cell.has_some_value:
+            return _solve_recursive(cell_index+1)
+        else:
+            for val_to_try in ALL_OPTIONS:
+                cell.value = val_to_try
+                if _solve_recursive(cell_index+1):
+                    return True
+                cell.value = None
+            return False
+        
     return board
 
