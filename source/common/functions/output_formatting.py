@@ -53,7 +53,7 @@ _COLOUR_MAPPING: dict[str, int] = {
 #     if (font_colour is None) and (background_colour is None):
 #         raise ValueError("You must specify either a font colour or a background colour")
 #
-#     #TODO:
+#     #_TODO:
 #     # - figure out why the cases are unreachable
 #     # - figure out the actual implementation
 #     # - figure out if this is the best way to do it

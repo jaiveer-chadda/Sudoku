@@ -1,7 +1,13 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
 from typing import Optional, Literal
+import os
+
+#—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Objects ——————————————————————————————————
 from source.objects.cell import Cell, board_flat
+
+#————— Functions ————————————————————————————————
+from source.common.functions.output_formatting import print_pretty_board
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
@@ -21,6 +27,9 @@ def backtracking_solve(_board: board_flat) -> board_flat | Literal["No solution 
     
     def solve_recursive(cell_index: int=0) -> bool:
         nonlocal solution_count, first_solution
+        
+        print_pretty_board(_board)
+        os.system('clear')
         
         if cell_index >= len(_board):
             solution_count += 1
