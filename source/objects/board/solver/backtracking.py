@@ -45,10 +45,8 @@ def backtracking_solve(_board: board_flat) -> board_flat | Literal["No solution 
             return solve_recursive(cell_index+1)
         
         for val_to_try in cell.possible_options:
-            if not _is_valid_assignment(cell, val_to_try):
-                continue
-            
-            cell.value = val_to_try
+            if _is_valid_assignment(cell, val_to_try):
+                cell.value = val_to_try
             
             if solve_recursive(cell_index + 1):
                 return True

@@ -21,7 +21,7 @@ from source.common.functions.output_formatting import format_set, get_formatted_
 
 def _validate_unique_input(index: int, coords: coordinates) -> None:
     if not ((index is None) ^ (coords is None)):
-        raise ValueError(
+        raise TypeError(
             "'fill_cell' takes an input of at least one of 'index: int', "
             "or 'coords: tuple[int, int]', but not both."
         )

@@ -85,7 +85,7 @@ class Cell:
             case "centre": self.central_candidates.append(number_to_add)
             case "colour": self.colours.append(number_to_add)
             case _:
-                raise ValueError("Invalid cell type")
+                raise TypeError("Invalid cell type")
     
     def remove_or_delete_number(self, number_to_remove: int, input_type: CellInsertType) -> None:
         match input_type:
@@ -94,7 +94,7 @@ class Cell:
             case "centre": self.central_candidates.remove(number_to_remove)
             case "colour": self.colours.remove(number_to_remove)
             case _:
-                raise ValueError("Invalid cell type")
+                raise TypeError("Invalid cell type")
         
     def copy(self) -> Cell:
         new: Cell = object.__new__(Cell)

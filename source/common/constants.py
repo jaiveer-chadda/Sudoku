@@ -11,7 +11,7 @@ def _int_sqrt(int_: int) -> int:
     # just a simple function that asserts that the inputted integer is a square number,
     #   and returns its square root
     if not isinstance(result := int(sqrt(int_)), int):
-        raise ValueError(f"sqrt(int_) must be an integer\n{int_=}, {sqrt(int_)=}, {result=}")
+        raise TypeError(f"sqrt(int_) must be an integer\n{int_=}, {sqrt(int_)=}, {result=}")
     return int(result)
 
 
