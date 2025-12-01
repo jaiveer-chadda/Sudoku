@@ -1,6 +1,6 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
 from typing import Optional, Literal
-import os
+from os import system
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Objects ——————————————————————————————————
@@ -29,7 +29,7 @@ def backtracking_solve(_board: board_flat) -> board_flat | Literal["No solution 
         nonlocal solution_count, first_solution
         
         print_pretty_board(_board)
-        os.system('clear')
+        system('clear')
         
         if cell_index >= len(_board):
             solution_count += 1

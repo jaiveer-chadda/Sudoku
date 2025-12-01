@@ -1,5 +1,5 @@
 import re
-import sys
+from sys import stdout
 
 
 class Reprinter:
@@ -9,17 +9,17 @@ class Reprinter:
     @staticmethod
     def move_up(lines: int) -> None:
         for _ in range(lines):
-            sys.stdout.write("\x1b[A")
+            stdout.write("\x1b[A")
     
     def reprint(self, text: str) -> None:
         # Clear previous text by overwriting non-spaces with spaces
         self.move_up(self.text.count("\n"))
-        sys.stdout.write(re.sub(r"\S", " ", self.text))
+        stdout.write(re.sub(r"\S", " ", self.text))
         
         # Print new text
         lines = min(self.text.count("\n"), text.count("\n"))
         self.move_up(lines)
-        sys.stdout.write(text)
+        stdout.write(text)
         self.text = text
 
 
