@@ -4,6 +4,7 @@ from typing import Literal  #_, Optional
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS
+from source.common.types_ import ANSIColour
 
 #————— Objects ——————————————————————————————————
 from source.objects.cell import board_flat
@@ -13,41 +14,12 @@ from source.objects.cell import board_flat
 _ESCAPE_CHAR: str = '\x1b'
 _RESET: str = f"{_ESCAPE_CHAR}[0m"
 
-_COLOUR_MAPPING: dict[str, int] = {
-    "black":    0,
-    "red":      1,
-    "green":    2,
-    "yellow":   3,
-    "blue":     4,
-    "magenta":  5,
-    "cyan":     6,
-    "white":    7
-}
-
 
 # def colour_text(
 #         text: str,
-#         font_colour: Optional[Literal[
-#             "black",
-#             "red",
-#             "green",
-#             "yellow",
-#             "blue",
-#             "magenta",
-#             "cyan",
-#             "white"
-#         ] | tuple[int, int, int] | int] = None,
+#         font_colour: Colour | tuple[int, int, int] | int] = None,
 #         font_is_bright: bool = False,
-#         background_colour: Optional[Literal[
-#             "black",
-#             "red",
-#             "green",
-#             "yellow",
-#             "blue",
-#             "magenta",
-#             "cyan",
-#             "white"
-#         ] | tuple[int, int, int] | int] = None,
+#         background_colour: Colour | tuple[int, int, int] | int] = None,
 #         background_is_bright: bool = False
 # ) -> str:
 #     if (font_colour is None) and (background_colour is None):
@@ -62,7 +34,6 @@ _COLOUR_MAPPING: dict[str, int] = {
 #     _font_col_type: Optional[str] = None
 #     match font_colour:
 #         case str():
-#             font_colour = _COLOUR_MAPPING[font_colour]
 #             _font_col_type = "8_16"
 #         case int() if 0 <= font_colour <= 7:
 #             _font_col_type = "8_16"
@@ -76,7 +47,6 @@ _COLOUR_MAPPING: dict[str, int] = {
 #     _bg_col_type: Optional[str] = None
 #     match background_colour:
 #         case str():
-#             background_colour = _COLOUR_MAPPING[background_colour]
 #             _bg_col_type = "8_16"
 #         case int() if 0 <= font_colour <= 7:
 #             _bg_col_type = "8_16"
@@ -93,19 +63,8 @@ _COLOUR_MAPPING: dict[str, int] = {
 #     return f"{_ESCAPE_CHAR}[0;31m{text}"
 
 
-def colour_text(
-        text: str | int,
-        font_colour: Literal[
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white"
-        ]) -> str:
-    return f"{_ESCAPE_CHAR}[0;3{_COLOUR_MAPPING[font_colour]}m{text}{_RESET}"
+def colour_text(text: str | int, font_colour: ANSIColour) -> str:
+    return f"{_ESCAPE_CHAR}[0;3{font_colour}m{text}{_RESET}"
 
 
 def format_set(input_set: set[int]) -> str:
@@ -202,7 +161,7 @@ def _get_board_with_borders(input_board: board_flat) -> str:
         *[         # make sure to unpack the result of the list comprehension,
             f"{    #    so that all the values can be individually assigned
                 " " if (val := cell.value) in (0, None) else (  # don't display a cell if its value is 0 or None
-                    val if cell.is_given_value else colour_text(val, "blue")
+                    val if cell.is_given_value else colour_text(val, ANSIColour.BLUE)
                 )  # if a cell was determined by the program, then highlight it as blue
             }" for i, cell in enumerate(input_board)
         ]

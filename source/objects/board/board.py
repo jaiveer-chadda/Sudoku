@@ -4,7 +4,7 @@ from typing import Optional, Iterable, overload
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE
-from source.common.types_ import board_matrix_raw, board_flat_raw, colour, coordinates, cell_insert_type
+from source.common.types_ import board_matrix_raw, board_flat_raw, cell_colour, coordinates, CellInsertType
 
 #————— Objects ——————————————————————————————————
 from source.objects.cell import Cell, validate_input_type, board_flat
@@ -60,16 +60,16 @@ class Board:
     
     #———— fill_cell() —————————————————————————————
     @overload
-    def fill_cell(self, number_to_add: int | colour, type_: cell_insert_type, index: int) -> None:
+    def fill_cell(self, number_to_add: int | cell_colour, type_: CellInsertType, index: int) -> None:
         pass
 
     @overload
-    def fill_cell(self, number_to_add: int | colour, type_: cell_insert_type, coords: coordinates) -> None:
+    def fill_cell(self, number_to_add: int | cell_colour, type_: CellInsertType, coords: coordinates) -> None:
         pass
     
     def fill_cell(self,
-                  number_to_add: int | colour,
-                  type_: cell_insert_type,
+                  number_to_add: int | cell_colour,
+                  type_: CellInsertType,
                   index: Optional[int]=None,
                   coords: Optional[coordinates]=None
                   ) -> None:

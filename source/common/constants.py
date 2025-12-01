@@ -18,19 +18,9 @@ def _int_sqrt(int_: int) -> int:
 BOARD_SIZE: int = 9  # the board dimensions, eg =9 for a standard 9x9 sudoku board
 BOX_SIZE: int = _int_sqrt(BOARD_SIZE)  # the sub-box dimensions (=3 for a standard sudoku board)
 
-ALL_OPTIONS: tuple[int] = tuple(range(1, BOARD_SIZE + 1))  # a tuple containing the numbers 1 -> 9
-ALL_OPTIONS_SET: set[int] = set(range(1, BOARD_SIZE + 1))  # a  set  containing the numbers 1 -> 9
-
-COLOUR_OPTIONS: tuple[str, ...] = (
-    "black",
-    "red",
-    "green",
-    "yellow",
-    "blue",
-    "magenta",
-    "cyan",
-    "white"
-)
+_ALL_OPTIONS_RANGE: range = range(1, BOARD_SIZE + 1)
+ALL_OPTIONS: tuple[int] = tuple(_ALL_OPTIONS_RANGE)  # a tuple containing the numbers 1 -> 9
+ALL_OPTIONS_SET: set[int] = set(_ALL_OPTIONS_RANGE)  # a  set  containing the numbers 1 -> 9
 
 #?temp
 #    it's just here while I create the solver

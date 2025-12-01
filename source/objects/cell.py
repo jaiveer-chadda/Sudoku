@@ -1,12 +1,11 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
 from dataclasses import dataclass, field
-from copy import deepcopy
 from typing import Optional
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— Consts & Types ———————————————————————————
 from source.common.constants import BOARD_SIZE, ALL_OPTIONS_SET
-from source.common.types_ import colour, coordinates, Board, cell_insert_type
+from source.common.types_ import cell_colour, coordinates, Board, CellInsertType
 
 #————— Functions ————————————————————————————————
 from source.common.functions.calculations import get_index_from_coords, get_parent_box_from_coords
@@ -17,10 +16,12 @@ type board_flat = list[Cell]
 type board_matrix = list[list[Cell]]
 
 
-def validate_input_type(number_to_check: int, type_: cell_insert_type) -> None:
-    if (number_to_check is colour) and (type_ in ("value", "corner", "centre")):
+def validate_input_type(number_to_check: int, type_: CellInsertType) -> None:
+    if (number_to_check is cell_colour) and (type_ in (
+            CellInsertType.VALUE, CellInsertType.CORNER, CellInsertType.CENTRE
+    )):
         raise TypeError("'number_to_add' must be of type 'int'")
-    elif (number_to_check is not colour) and (type_ == "colour"):
+    elif (number_to_check is not cell_colour) and (type_ == "colour"):
         raise TypeError("'number_to_add' must be of type 'colour'")
 
 
@@ -39,7 +40,7 @@ class Cell:
     
     corner_candidates: list[int] = field(default_factory=list)
     central_candidates: list[int] = field(default_factory=list)
-    colours: list[colour] = field(default_factory=list)
+    colours: list[cell_colour] = field(default_factory=list)
     
     is_given_value: Optional[bool] = None
     
@@ -77,7 +78,7 @@ class Cell:
         if len(self.possible_options) == 1:
             self.value = list(self.possible_options)[0]
     
-    def fill_or_add_number(self, number_to_add: int, input_type: cell_insert_type) -> None:
+    def fill_or_add_number(self, number_to_add: int, input_type: CellInsertType) -> None:
         match input_type:
             case "value":  self.value = number_to_add
             case "corner": self.corner_candidates.append(number_to_add)
@@ -86,7 +87,7 @@ class Cell:
             case _:
                 raise ValueError("Invalid cell type")
     
-    def remove_or_delete_number(self, number_to_remove: int, input_type: cell_insert_type) -> None:
+    def remove_or_delete_number(self, number_to_remove: int, input_type: CellInsertType) -> None:
         match input_type:
             case "value":  self.value = None
             case "corner": self.corner_candidates.remove(number_to_remove)
