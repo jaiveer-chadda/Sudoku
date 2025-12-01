@@ -4,14 +4,14 @@ import sys
 
 class Reprinter:
     def __init__(self) -> None:
-        self.text = ''
+        self.text: str = ''
     
     @staticmethod
-    def move_up(lines) -> None:
+    def move_up(lines: int) -> None:
         for _ in range(lines):
             sys.stdout.write("\x1b[A")
     
-    def reprint(self, text) -> None:
+    def reprint(self, text: str) -> None:
         # Clear previous text by overwriting non-spaces with spaces
         self.move_up(self.text.count("\n"))
         sys.stdout.write(re.sub(r"\S", " ", self.text))
@@ -24,7 +24,7 @@ class Reprinter:
 
 
 def main() -> None:
-    reprinter = Reprinter()
+    reprinter: Reprinter = Reprinter()
     
     reprinter.reprint("Foobar\nBazbar")
     reprinter.reprint("Foo\nbar")
