@@ -90,4 +90,4 @@ BOARD_OPTIONS: dict[str, board_matrix_raw] = {
 #?also temp
 #    the programme will eventually take the board as an input from somewhere else (or it'll make its own),
 #    so this is just temporary - it makes it easier for me personally to handle
-board_input: board_matrix_raw = BOARD_OPTIONS["hard"]
+board_input: board_matrix_raw = BOARD_OPTIONS["anti-backtracking"]

@@ -26,7 +26,6 @@ def get_solved_board(board: board_flat) -> board_flat:
     
     print_pretty_board(board)
     solve_result = backtracking_solve(board)
-    print(solve_result)
     
     if isinstance(solve_result, str):
         raise SolutionCountError(solve_result)

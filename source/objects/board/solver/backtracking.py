@@ -22,14 +22,17 @@ def _is_valid_assignment(cell: Cell, val: int) -> bool:
 
 
 def backtracking_solve(_board: board_flat) -> board_flat | Literal["No solution found", "Multiple solutions found"]:
+    iterations: int = 0
+    
     solution_count: int = 0
     first_solution: Optional[board_flat] = None
     
     def solve_recursive(cell_index: int=0) -> bool:
-        nonlocal solution_count, first_solution
+        nonlocal solution_count, first_solution, iterations
         
-        print_pretty_board(_board)
-        system('clear')
+        iterations += 1
+        # print_pretty_board(_board)
+        # system('clear')
         
         if cell_index >= len(_board):
             solution_count += 1
@@ -44,9 +47,11 @@ def backtracking_solve(_board: board_flat) -> board_flat | Literal["No solution 
         if cell.has_some_value:
             return solve_recursive(cell_index+1)
         
-        for val_to_try in cell.possible_options:
-            if _is_valid_assignment(cell, val_to_try):
-                cell.value = val_to_try
+        for val_to_try in list(cell.possible_options)[::-1]:
+            if not _is_valid_assignment(cell, val_to_try):
+                continue
+                
+            cell.value = val_to_try
             
             if solve_recursive(cell_index + 1):
                 return True
@@ -54,8 +59,13 @@ def backtracking_solve(_board: board_flat) -> board_flat | Literal["No solution 
         
         return False  # keep searching
     
-    solve_recursive()
+    try:
+        solve_recursive()
+    except KeyboardInterrupt:
+        print(f"\n\n{iterations:,d}")
+        quit()
     
+    print(f"\n{iterations:,d}")
     match solution_count:
         case 0:
             return "No solution found"
