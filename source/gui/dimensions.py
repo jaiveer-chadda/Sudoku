@@ -1,5 +1,7 @@
+#—— External Imports —————————————————————————————————————————————————————————————————————————
 from dataclasses import dataclass
 from typing import Optional, Generator
+#—————————————————————————————————————————————————————————————————————————————————————————————
 
 
 class NotSquareError(Exception):
@@ -7,11 +9,13 @@ class NotSquareError(Exception):
         super().__init__(f"{obj.__repr__()} is not a square.")
 
 
+#—— Dimension ————————————————————————————————————————————————————————————————————————————————————————————————————————
 @dataclass
 class Dimension:
     width: int
     height: Optional[int] = None
     
+    #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __post_init__(self) -> None:
         # if only one value is entered, or if the values are the same
         #   assume the dimensions are a square (nxn)
@@ -19,6 +23,16 @@ class Dimension:
         
         if self.is_square:
             self.height = self.width
+    
+    #—— Properties ———————————————————————————————————————————————————————————————————————————
+    #———— Alternatives to width and height ————————
+    @property
+    def x(self) -> int:
+        return self.width
+    
+    @property
+    def y(self) -> int:
+        return self.height
     
     #?maybe rename this property
     #?  I don't think 'dimension' rly captures what it is
@@ -28,14 +42,7 @@ class Dimension:
             raise NotSquareError(self)
         return self.width
     
-    @property
-    def x(self) -> int:
-        return self.width
-    
-    @property
-    def y(self) -> int:
-        return self.height
-    
+    #———— area/count ——————————————————————————————
     @property
     def area(self) -> int:
         return self.width * self.height
@@ -44,17 +51,23 @@ class Dimension:
     def count(self) -> int:
         return self.area
     
-    @property
-    def largest(self) -> int:
-        return max(self.width, self.height)
-    
+    #———— smallest/largest ——————————————————————————————
     @property
     def smallest(self) -> int:
         return min(self.width, self.height)
     
+    @property
+    def largest(self) -> int:
+        return max(self.width, self.height)
+    
+    #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
     def __repr__(self) -> str:
         return f"Dimensions(width|x={self.width}, height|y={self.height})"
     
     def __iter__(self) -> Generator[int, None, None]:
+        # this method is here in case I want to treat the object
+        #   as a list or iterator of some sort
         for value in (self.width, self.height):
             yield value
+            
+#—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

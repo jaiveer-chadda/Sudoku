@@ -1,6 +1,16 @@
+#—— External Imports —————————————————————————————————————————————————————————————————————————
 import tkinter as tk
 
+#—— Project Imports ——————————————————————————————————————————————————————————————————————————
+#————— GUI ——————————————————————————————————————
 from source.gui.dimensions import Dimension
+#—————————————————————————————————————————————————————————————————————————————————————————————
+
+# TODO:
+#   - move all of the GUI classes into their own files
+#   - rework the hardcoded window sizes to be based on the screen size instead
+#       - maybe on this one
+#       - test it first
 
 
 APP_TITLE: str = "Sudoku App"
@@ -13,11 +23,12 @@ BOARD_SIZE_CELLS: Dimension = Dimension(9)
 
 BOARD_PADDING_TOP: int = 50
 
-#?colours are just for debugging
+#?colours are just for debugging (for now)
 BOARD_BACKGROUND: str = "red"
 CELL_BACKGROUND: str = "green"
 
 
+#—— Main App —————————————————————————————————————————————————————————————————————————————————————————————————————————
 class AppGUI:
     def __init__(
             self,
@@ -58,8 +69,9 @@ class AppGUI:
             #    so if you put the window in the middle of the screen, it looks off-centre)
             f"+{_window_centre.x + self._offset.x}+{_window_centre.y + self._offset.y}"
         )
-        
-        
+
+
+#—— Board ————————————————————————————————————————————————————————————————————————————————————————————————————————————
 class BoardGUI:
     def __init__(
             self,
@@ -109,6 +121,7 @@ class BoardGUI:
             CellGUI(self, cell_index)
 
 
+#—— An Individual Cell ———————————————————————————————————————————————————————————————————————————————————————————————
 class CellGUI:
     def __init__(
             self,
@@ -141,8 +154,15 @@ class CellGUI:
         debug_lab: tk.Label = tk.Label(self.frame, text=f"({self.col + 1},{self.row + 1})")
         debug_lab.pack(expand=True, fill='both')
 
+#—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-app: AppGUI = AppGUI()
-board: BoardGUI = BoardGUI(app)
 
-app.root_window.mainloop()
+def main() -> None:
+    app: AppGUI = AppGUI()
+    _: BoardGUI = BoardGUI(app)
+    
+    app.root_window.mainloop()
+
+
+if __name__ == "__main__":
+    main()
