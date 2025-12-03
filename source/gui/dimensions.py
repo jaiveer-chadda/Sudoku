@@ -20,6 +20,8 @@ class Dimension:
         if self.is_square:
             self.height = self.width
     
+    #?maybe rename this property
+    #?  I don't think 'dimension' rly captures what it is
     @property
     def dimension(self) -> int:
         if not self.is_square:
