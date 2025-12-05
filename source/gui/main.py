@@ -120,7 +120,7 @@ class BoardGUI:
         #?the use of 'dimension' here will have to be changed,
         #?  cos it only works if the board's a square
         for cell_index in range(BOARD_SIZE_CELLS.dimension**2):
-            CellGUI(self, cell_index)  #, background="")
+            CellGUI(self, cell_index)
 
 
 #—— An Individual Cell ———————————————————————————————————————————————————————————————————————————————————————————————
@@ -142,18 +142,23 @@ class CellGUI:
         self.col: int = index % BOARD_SIZE_CELLS.dimension
         
         self._cell_init()
-        self._add_debug_label()
+        # self._add_debug_label()
         
     def _cell_init(self) -> None:
-        self.frame: tk.Frame = tk.Frame(
+        self.frame: BorderedFrame = BorderedFrame(
             master=self.master.frame,
-            borderwidth=2,
-            relief='solid',
-            background=self._background
+            border_weights=Directions(0, 6, 4, 2),
+            border_colour="blue",
+            
+            interior_widget=tk.Label,
+                text=f"({self.col + 1},{self.row + 1})",
+                background=self._background
         )
         
+        self.frame.interior.pack(expand=True, fill='both')
+        
         # sticky=tk.NSEW makes the cell's corners expand to fill the grid position
-        self.frame.grid(row=self.row, column=self.col, sticky=tk.NSEW)  #, padx=1, pady=1)
+        self.frame.grid(row=self.row, column=self.col, sticky=tk.NSEW, padx=1, pady=1)
         self.frame.grid_propagate(False)
 
     def _add_debug_label(self) -> None:
@@ -165,40 +170,40 @@ class CellGUI:
 
 
 def main() -> None:
-    # app: AppGUI = AppGUI()
-    # _: BoardGUI = BoardGUI(app)
+    app: AppGUI = AppGUI()
+    _: BoardGUI = BoardGUI(app)
+
+    app.root_window.mainloop()
+    
+    # root = tk.Tk()
+    # root.geometry("300x400")
+    # root.configure(background="white")
     #
-    # app.root_window.mainloop()
-    
-    root = tk.Tk()
-    root.geometry("300x400")
-    root.configure(background="white")
-    
-    f: BorderedFrame = BorderedFrame(
-        root,
-        border_weights=Directions(0, 0, 7, 0),
-        border_colour="blue",
-        
-        interior_widget=tk.Label,
-        text="This is some text",
-        background="red",
-        padx=3
-    )
-    f.pack(pady=10)
-    
-    f: BorderedFrame = BorderedFrame(
-        root,
-        border_weights=Directions(2, 2, 7, 2),
-        border_colour="green",
-        
-        background="orange"
-    )
-    f.pack(pady=10)
-    
-    test_label: tk.Label = tk.Label(f.interior, text="This is another example", background="purple")
-    test_label.pack(padx=4, pady=2)
-    
-    root.mainloop()
+    # f: BorderedFrame = BorderedFrame(
+    #     root,
+    #     border_weights=Directions(0, 0, 7, 0),
+    #     border_colour="blue",
+    #
+    #     interior_widget=tk.Label,
+    #     text="This is some text",
+    #     background="red",
+    #     padx=3
+    # )
+    # f.pack(pady=10)
+    #
+    # f: BorderedFrame = BorderedFrame(
+    #     root,
+    #     border_weights=Directions(2, 2, 7, 2),
+    #     border_colour="green",
+    #
+    #     background="orange"
+    # )
+    # f.pack(pady=10)
+    #
+    # test_label: tk.Label = tk.Label(f.interior, text="This is another example", background="purple")
+    # test_label.pack(padx=4, pady=2)
+    #
+    # root.mainloop()
 
 
 if __name__ == "__main__":
