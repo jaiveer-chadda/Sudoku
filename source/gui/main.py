@@ -142,17 +142,13 @@ class CellGUI:
         self.col: int = index % BOARD_SIZE_CELLS.dimension
         
         self._cell_init()
-        # self._add_debug_label()
+        self._add_debug_label()
         
     def _cell_init(self) -> None:
         self.frame: BorderedFrame = BorderedFrame(
             master=self.master.frame,
             border_weights=Directions(0, 6, 4, 2),
             border_colour="blue",
-            
-            interior_widget=tk.Label,
-                text=f"({self.col + 1},{self.row + 1})",
-                background=self._background
         )
         
         self.frame.interior.pack(expand=True, fill='both')
@@ -163,7 +159,11 @@ class CellGUI:
 
     def _add_debug_label(self) -> None:
         # put some text in each cell with its row and column number - just so I can see what's happening
-        debug_lab: tk.Label = tk.Label(self.frame, text=f"({self.col + 1},{self.row + 1})")
+        debug_lab = tk.Label(
+            self.frame.interior,  # this will overwrite any interior currently in self.frame
+            text=f"({self.col + 1},{self.row + 1})",
+            background=self._background
+        )
         debug_lab.pack(expand=True, fill='both')
 
 #—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
