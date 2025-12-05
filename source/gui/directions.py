@@ -1,5 +1,5 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
-from typing import Generator
+from typing import Generator, Iterable, Annotated
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
@@ -7,7 +7,6 @@ from typing import Generator
 # I'm using a regular class instead of a dataclass,
 #   cos pycharm doesn't like type-hinting dataclasses, and it's kinda important for this case
 class Directions:
-    
     #—— Initialisation ———————————————————————————————————————————————————————————————————————
     def __init__(self, up: int = 0, down: int = 0, left: int = 0, right: int = 0) -> None:
         self.up:    int = up
@@ -43,6 +42,20 @@ class Directions:
     def east(self)  -> int: return self.right
     
     #—— Dunder Methods ———————————————————————————————————————————————————————————————————————
+    def __add__(self, other: Directions | Annotated[Iterable[int], 'len=4']) -> Directions:
+        if len(other) != 4:
+            raise TypeError("Iterable must be of length 4")
+        return Directions(*[sum(pair) for pair in zip(self, other)])
+    
+    def __radd__(self, other) -> Directions:
+        return self.__add__(other)
+    
+    def __iadd__(self, other) -> Directions:
+        return self.__add__(other)
+    
+    def __len__(self) -> int:
+        return 4
+    
     def __iter__(self) -> Generator[int, None, None]:
         # this method is here in case I want to treat the object
         #   as a list or iterator of some sort
