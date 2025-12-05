@@ -9,7 +9,7 @@ class NotSquareError(Exception):
         super().__init__(f"{obj.__repr__()} is not a square.")
 
 
-#—— Dimension ————————————————————————————————————————————————————————————————————————————————————————————————————————
+#—— Dimensions ———————————————————————————————————————————————————————————————————————————————————————————————————————
 @dataclass
 class Dimensions:
     width: int
@@ -27,14 +27,11 @@ class Dimensions:
     #—— Properties ———————————————————————————————————————————————————————————————————————————
     #———— Alternatives to width and height ————————
     @property
-    def x(self) -> int:
-        return self.width
-    
+    def x(self) -> int: return self.width
     @property
-    def y(self) -> int:
-        return self.height
+    def y(self) -> int: return self.height
     
-    #?maybe rename this property
+    #?I might rename this property
     #?  I don't think 'dimension' rly captures what it is
     @property
     def dimension(self) -> int:
