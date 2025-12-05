@@ -2,6 +2,8 @@
 import tkinter as tk
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
+#————— Consts & Types ———————————————————————————
+from common.types_ import coordinates
 #————— GUI ——————————————————————————————————————
 from source.gui.dimensions import Dimensions
 from source.gui.directions import Directions
@@ -27,23 +29,43 @@ BOARD_PADDING_TOP: int = 50
 
 #?colours are just for debugging (for now)
 BOARD_BACKGROUND: str = "red"
-CELL_BACKGROUND: str = "green"
+CELL_BACKGROUND:  str = "green"
+
+IN_BETWEEN_CELL_WIDTH: int = 0
+BOX_BORDER_WIDTH:      int = 1
+BOARD_BORDER_WIDTH:    int = 2
+
+
+def _get_border_widths(coords: coordinates) -> Directions:
+    col, row = coords
+    
+    up   : int = BOX_BORDER_WIDTH/2 if row in (1, 4, 7) else IN_BETWEEN_CELL_WIDTH
+    down : int = BOX_BORDER_WIDTH/2 if row in (3, 6, 9) else IN_BETWEEN_CELL_WIDTH
+    left : int = BOX_BORDER_WIDTH/2 if col in (1, 4, 7) else IN_BETWEEN_CELL_WIDTH
+    right: int = BOX_BORDER_WIDTH/2 if col in (3, 6, 9) else IN_BETWEEN_CELL_WIDTH
+    
+    up    = BOARD_BORDER_WIDTH if row == 1 else up
+    down  = BOARD_BORDER_WIDTH if row == 9 else down
+    left  = BOARD_BORDER_WIDTH if col == 1 else left
+    right = BOARD_BORDER_WIDTH if col == 9 else right
+    
+    return Directions(up, down, left, right)
 
 
 #—— Main App —————————————————————————————————————————————————————————————————————————————————————————————————————————
 class AppGUI:
     def __init__(
             self,
-            title: str = APP_TITLE,
-            width: int = WINDOW_SIZE.width,
-            height: int = WINDOW_SIZE.height,
+            title:    str = APP_TITLE,
+            width:    int = WINDOW_SIZE.width,
+            height:   int = WINDOW_SIZE.height,
             offset_x: int = WINDOW_OFFSET.x,
             offset_y: int = WINDOW_OFFSET.y
     ) -> None:
         self.title: str = title
         
         self._win_size: Dimensions = Dimensions(width, height)
-        self._offset: Dimensions = Dimensions(offset_x, offset_y)
+        self._offset:   Dimensions = Dimensions(offset_x, offset_y)
         
         self._window_init()
 
@@ -147,22 +169,22 @@ class CellGUI:
     def _cell_init(self) -> None:
         self.frame: BorderedFrame = BorderedFrame(
             master=self.master.frame,
-            border_weights=Directions(0, 6, 4, 2),
-            border_colour="blue",
+            border_weights=_get_border_widths(coords=(self.col+1, self.row+1)),
+            border_colour="white"
         )
-        
         self.frame.interior.pack(expand=True, fill='both')
         
         # sticky=tk.NSEW makes the cell's corners expand to fill the grid position
-        self.frame.grid(row=self.row, column=self.col, sticky=tk.NSEW, padx=1, pady=1)
+        self.frame.grid(row=self.row, column=self.col, sticky=tk.NSEW)
         self.frame.grid_propagate(False)
 
     def _add_debug_label(self) -> None:
         # put some text in each cell with its row and column number - just so I can see what's happening
+        # NB: this will overwrite any interior currently in self.frame
         debug_lab = tk.Label(
-            self.frame.interior,  # this will overwrite any interior currently in self.frame
+            self.frame.interior,
             text=f"({self.col + 1},{self.row + 1})",
-            background=self._background
+            # background=self._background
         )
         debug_lab.pack(expand=True, fill='both')
 
@@ -175,36 +197,6 @@ def main() -> None:
 
     app.root_window.mainloop()
     
-    # root = tk.Tk()
-    # root.geometry("300x400")
-    # root.configure(background="white")
-    #
-    # f: BorderedFrame = BorderedFrame(
-    #     root,
-    #     border_weights=Directions(0, 0, 7, 0),
-    #     border_colour="blue",
-    #
-    #     interior_widget=tk.Label,
-    #     text="This is some text",
-    #     background="red",
-    #     padx=3
-    # )
-    # f.pack(pady=10)
-    #
-    # f: BorderedFrame = BorderedFrame(
-    #     root,
-    #     border_weights=Directions(2, 2, 7, 2),
-    #     border_colour="green",
-    #
-    #     background="orange"
-    # )
-    # f.pack(pady=10)
-    #
-    # test_label: tk.Label = tk.Label(f.interior, text="This is another example", background="purple")
-    # test_label.pack(padx=4, pady=2)
-    #
-    # root.mainloop()
-
-
+    
 if __name__ == "__main__":
     main()
