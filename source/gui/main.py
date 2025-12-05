@@ -164,60 +164,42 @@ class CellGUI:
 #—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
-# def main() -> None:
-#     # app: AppGUI = AppGUI()
-#     # _: BoardGUI = BoardGUI(app)
-#     #
-#     # app.root_window.mainloop()
-#
-#     try:
-#         from Tkinter import Tk, Label
-#     except ImportError:
-#         from tkinter import Tk, Label
-#
-#     root = Tk()
-#     root.geometry("300x400")
-#     root.configure(background="white")
-#
-#     f = BorderedFrame(
-#         root, text="This is some text", background="white", border_colour="blue", padx=3,
-#         border_weights=Dir(2, 0, 0, 0), interior_widget=Label
-#     )
-#     f.pack(pady=10)
-#
-#     f = BorderedFrame(
-#         root, background="white", border_colour="green",
-#         border_weights=Dir(2, 0, 0, 0)
-#     )
-#     f.pack(pady=10)
-#
-#     Label(f.interior, text="This is another example", background="white").pack(padx=4, pady=2)
-#
-#     root.mainloop()
-
-
-# if __name__ == "__main__":
-#     main()
-
-
-if __name__ == "__main__":
-    try:
-        from Tkinter import Tk, Label
-    except ImportError:
-        from tkinter import Tk, Label
+def main() -> None:
+    # app: AppGUI = AppGUI()
+    # _: BoardGUI = BoardGUI(app)
+    #
+    # app.root_window.mainloop()
     
-    root = Tk()
+    root = tk.Tk()
     root.geometry("300x400")
     root.configure(background="white")
     
-    # f = BorderedFrame(root, text="This is a text", background="white", border_colour="blue", padx=3, border_left=7, interior_widget=Label)
-    f = BorderedFrame(root, text="This is a text", background="red", border_colour="blue", padx=3, border_weights=Directions(0, 0, 7, 0), interior_widget=Label)
+    f: BorderedFrame = BorderedFrame(
+        root,
+        border_weights=Directions(0, 0, 7, 0),
+        border_colour="blue",
+        
+        interior_widget=tk.Label,
+        text="This is some text",
+        background="red",
+        padx=3
+    )
     f.pack(pady=10)
     
-    # f = BorderedFrame(root, background="white", border_colour="green", border_left=7, border_top=2, border_right=2, border_bottom=2)
-    f = BorderedFrame(root, background="orange", border_colour="green", border_weights=Directions(2, 2, 7, 2))
+    f: BorderedFrame = BorderedFrame(
+        root,
+        border_weights=Directions(2, 2, 7, 2),
+        border_colour="green",
+        
+        background="orange"
+    )
     f.pack(pady=10)
     
-    Label(f.interior, text="This is another example", background="purple").pack(padx=4, pady=2)
+    test_label: tk.Label = tk.Label(f.interior, text="This is another example", background="purple")
+    test_label.pack(padx=4, pady=2)
     
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
