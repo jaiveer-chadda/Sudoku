@@ -1,6 +1,6 @@
-# #—— External Imports —————————————————————————————————————————————————————————————————————————
-# import tkinter as tk
-# # from typing import Optional
+#—— External Imports —————————————————————————————————————————————————————————————————————————
+import tkinter as tk
+# from typing import Optional
 #
 # #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 # #————— GUI ——————————————————————————————————————
@@ -8,15 +8,9 @@
 # #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
-try:
-    from Tkinter import Tk, Frame
-except ImportError:
-    from tkinter import Tk, Frame
-
-
-class BorderedFrame(Frame):
-    def __init__(self, master, border_colour=None, border_left=0, border_top=0, border_right=0, border_bottom=0, interior_widget=Frame, **kwargs):
-        Frame.__init__(self, master, background=border_colour, bd=0, highlightthickness=0)
+class BorderedFrame(tk.Frame):
+    def __init__(self, master, border_colour=None, border_left=0, border_top=0, border_right=0, border_bottom=0, interior_widget=tk.Frame, **kwargs):
+        tk.Frame.__init__(self, master, background=border_colour, bd=0, highlightthickness=0)
         
         self.interior = interior_widget(self, **kwargs)
         self.interior.pack(padx=(border_left, border_right), pady=(border_top, border_bottom))
