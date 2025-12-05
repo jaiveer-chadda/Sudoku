@@ -9,10 +9,20 @@ import tkinter as tk
 
 
 class BorderedFrame(tk.Frame):
-    def __init__(self, master, border_colour=None, border_left=0, border_top=0, border_right=0, border_bottom=0, interior_widget=tk.Frame, **kwargs):
+    def __init__(
+            self,
+            master: tk.Misc,
+            border_colour: str = "",
+            border_left: int = 0,
+            border_top: int = 0,
+            border_right: int = 0,
+            border_bottom: int = 0,
+            interior_widget=tk.Frame,
+            **kwargs
+    ) -> None:
         tk.Frame.__init__(self, master, background=border_colour, bd=0, highlightthickness=0)
         
-        self.interior = interior_widget(self, **kwargs)
+        self.interior: tk.Frame = interior_widget(self, **kwargs)
         self.interior.pack(padx=(border_left, border_right), pady=(border_top, border_bottom))
 
 
