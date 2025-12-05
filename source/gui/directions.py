@@ -1,16 +1,18 @@
 #—— External Imports —————————————————————————————————————————————————————————————————————————
-from dataclasses import dataclass
 from typing import Generator
 
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 
-@dataclass
+# using a regular class instead of a dataclass,
+#   cos pycharm doesn't like type-hinting dataclasses, and it's kinda important for this case
 class Directions:
-    up: int
-    down: int
-    left: int
-    right: int
+    def __init__(self, up: int = 0, down: int = 0, left: int = 0, right: int = 0) -> None:
+        # using
+        self.up = up
+        self.down = down
+        self.left = left
+        self.right = right
 
     @property
     def top(self) -> int:

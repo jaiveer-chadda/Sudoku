@@ -4,8 +4,8 @@ import tkinter as tk
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— GUI ——————————————————————————————————————
 from source.gui.dimensions import Dimensions
-from source.gui.directions import Directions as Dir
-from source.gui.bordered_frame import BorderedFrame  #, BorderedFrame
+from source.gui.directions import Directions
+from source.gui.bordered_frame import BorderedFrame
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 # TODO:
@@ -210,12 +210,14 @@ if __name__ == "__main__":
     root.geometry("300x400")
     root.configure(background="white")
     
-    f = BorderedFrame(root, text="This is a text", background="white", border_colour="blue", padx=3, border_left=7, interior_widget=Label)
+    # f = BorderedFrame(root, text="This is a text", background="white", border_colour="blue", padx=3, border_left=7, interior_widget=Label)
+    f = BorderedFrame(root, text="This is a text", background="red", border_colour="blue", padx=3, border_weights=Directions(0, 0, 7, 0), interior_widget=Label)
     f.pack(pady=10)
     
-    f = BorderedFrame(root, background="white", border_colour="green", border_left=7, border_top=2, border_right=2, border_bottom=2)
+    # f = BorderedFrame(root, background="white", border_colour="green", border_left=7, border_top=2, border_right=2, border_bottom=2)
+    f = BorderedFrame(root, background="orange", border_colour="green", border_weights=Directions(2, 2, 7, 2))
     f.pack(pady=10)
     
-    Label(f.interior, text="This is another example", background="white").pack(padx=4, pady=2)
+    Label(f.interior, text="This is another example", background="purple").pack(padx=4, pady=2)
     
     root.mainloop()
