@@ -5,13 +5,13 @@ from typing import Optional, Generator
 
 
 class NotSquareError(Exception):
-    def __init__(self, obj: Dimension) -> None:
+    def __init__(self, obj: Dimensions) -> None:
         super().__init__(f"{obj.__repr__()} is not a square.")
 
 
 #—— Dimension ————————————————————————————————————————————————————————————————————————————————————————————————————————
 @dataclass
-class Dimension:
+class Dimensions:
     width: int
     height: Optional[int] = None
     

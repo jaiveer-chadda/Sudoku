@@ -3,7 +3,9 @@ import tkinter as tk
 
 #—— Project Imports ——————————————————————————————————————————————————————————————————————————
 #————— GUI ——————————————————————————————————————
-from source.gui.dimensions import Dimension
+from source.gui.dimensions import Dimensions
+from source.gui.directions import Directions as Dir
+from source.gui.bordered_frame import BorderedFrame  #, BorderedFrame
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 # TODO:
@@ -15,11 +17,11 @@ from source.gui.dimensions import Dimension
 
 APP_TITLE: str = "Sudoku App"
 
-WINDOW_SIZE:      Dimension = Dimension(600, 800)
-WINDOW_OFFSET:    Dimension = Dimension(0, -30)
+WINDOW_SIZE:      Dimensions = Dimensions(600, 800)
+WINDOW_OFFSET:    Dimensions = Dimensions(0, -30)
 
-BOARD_SIZE_PX:    Dimension = Dimension(500)
-BOARD_SIZE_CELLS: Dimension = Dimension(9)
+BOARD_SIZE_PX:    Dimensions = Dimensions(500)
+BOARD_SIZE_CELLS: Dimensions = Dimensions(9)
 
 BOARD_PADDING_TOP: int = 50
 
@@ -40,8 +42,8 @@ class AppGUI:
     ) -> None:
         self.title: str = title
         
-        self._win_size: Dimension = Dimension(width, height)
-        self._offset: Dimension = Dimension(offset_x, offset_y)
+        self._win_size: Dimensions = Dimensions(width, height)
+        self._offset: Dimensions = Dimensions(offset_x, offset_y)
         
         self._window_init()
 
@@ -53,11 +55,11 @@ class AppGUI:
         self.root_window.resizable(False, False)
 
     def _set_window_dimensions_and_pos(self) -> None:
-        _screen_size: Dimension = Dimension(
+        _screen_size: Dimensions = Dimensions(
             self.root_window.winfo_screenwidth(),
             self.root_window.winfo_screenheight()
         )
-        _window_centre: Dimension = Dimension(
+        _window_centre: Dimensions = Dimensions(
             (_screen_size.width - self._win_size.width) // 2,
             (_screen_size.height - self._win_size.height) // 2
         )
@@ -118,7 +120,7 @@ class BoardGUI:
         #?the use of 'dimension' here will have to be changed,
         #?  cos it only works if the board's a square
         for cell_index in range(BOARD_SIZE_CELLS.dimension**2):
-            CellGUI(self, cell_index)
+            CellGUI(self, cell_index)  #, background="")
 
 
 #—— An Individual Cell ———————————————————————————————————————————————————————————————————————————————————————————————
@@ -143,10 +145,15 @@ class CellGUI:
         self._add_debug_label()
         
     def _cell_init(self) -> None:
-        self.frame: tk.Frame = tk.Frame(master=self.master.frame, borderwidth=1, background=self._background)
+        self.frame: tk.Frame = tk.Frame(
+            master=self.master.frame,
+            borderwidth=2,
+            relief='solid',
+            background=self._background
+        )
         
         # sticky=tk.NSEW makes the cell's corners expand to fill the grid position
-        self.frame.grid(row=self.row, column=self.col, sticky=tk.NSEW)
+        self.frame.grid(row=self.row, column=self.col, sticky=tk.NSEW)  #, padx=1, pady=1)
         self.frame.grid_propagate(False)
 
     def _add_debug_label(self) -> None:
@@ -157,12 +164,58 @@ class CellGUI:
 #—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
-def main() -> None:
-    app: AppGUI = AppGUI()
-    _: BoardGUI = BoardGUI(app)
-    
-    app.root_window.mainloop()
+# def main() -> None:
+#     # app: AppGUI = AppGUI()
+#     # _: BoardGUI = BoardGUI(app)
+#     #
+#     # app.root_window.mainloop()
+#
+#     try:
+#         from Tkinter import Tk, Label
+#     except ImportError:
+#         from tkinter import Tk, Label
+#
+#     root = Tk()
+#     root.geometry("300x400")
+#     root.configure(background="white")
+#
+#     f = BorderedFrame(
+#         root, text="This is some text", background="white", border_colour="blue", padx=3,
+#         border_weights=Dir(2, 0, 0, 0), interior_widget=Label
+#     )
+#     f.pack(pady=10)
+#
+#     f = BorderedFrame(
+#         root, background="white", border_colour="green",
+#         border_weights=Dir(2, 0, 0, 0)
+#     )
+#     f.pack(pady=10)
+#
+#     Label(f.interior, text="This is another example", background="white").pack(padx=4, pady=2)
+#
+#     root.mainloop()
+
+
+# if __name__ == "__main__":
+#     main()
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        from Tkinter import Tk, Label
+    except ImportError:
+        from tkinter import Tk, Label
+    
+    root = Tk()
+    root.geometry("300x400")
+    root.configure(background="white")
+    
+    f = BorderedFrame(root, text="This is a text", background="white", border_colour="blue", padx=3, border_left=7, interior_widget=Label)
+    f.pack(pady=10)
+    
+    f = BorderedFrame(root, background="white", border_colour="green", border_left=7, border_top=2, border_right=2, border_bottom=2)
+    f.pack(pady=10)
+    
+    Label(f.interior, text="This is another example", background="white").pack(padx=4, pady=2)
+    
+    root.mainloop()
