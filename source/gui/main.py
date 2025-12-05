@@ -11,10 +11,24 @@ from source.gui.bordered_frame import BorderedFrame
 #—————————————————————————————————————————————————————————————————————————————————————————————
 
 # TODO:
-#   - move all of the GUI classes into their own files
-#   - rework the hardcoded window sizes to be based on the screen size instead
-#       - maybe on this one
-#       - test it first
+#   File Management
+#       - move all of the GUI classes into their own files
+#       - move the constants into the constants file
+#           - and maybe start dividing up the constants
+#       - move the directions and dimensions files into source.common
+#           - and find a decent place in there for them
+#       - move bordered_frame somewhere else
+#           - it doesn't make sense for it to be with all the other gui stuff
+#                                                                                                                      .
+#   Refactoring
+#       - rework the hardcoded window sizes to be based on the screen size instead
+#           - maybe on this one
+#           - test it first
+#                                                                                                                      .
+#   Actual Features
+#       - Find a way to display the board on the gui
+#       - Gui board navigation
+#
 
 
 APP_TITLE: str = "Sudoku App"
